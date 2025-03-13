@@ -1,8 +1,8 @@
 <?php
 // Create database connection using config file
-include_once("config.php");
-include_once("decrypt.php");
-include_once("encryption.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/config.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
 // Encryption key and method
 $key = 'somebodyoncetoldmetheworldwasgonnarollmeiaintthesharpesttoolintheshed';
 $method = 'AES-256-CBC';

@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once("config.php"); // Include the database connection file
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/config.php"); // Include the database connection file
 
 // Check if the user is logged in (optional, for security)
 if (!isset($_SESSION['id'])) {
@@ -8,7 +8,6 @@ if (!isset($_SESSION['id'])) {
     exit();
 }
 
-// Fetch audit log data from the database
 $query = "SELECT audit_log.*, users.username 
           FROM audit_log 
           LEFT JOIN users ON audit_log.user_id = users.id 

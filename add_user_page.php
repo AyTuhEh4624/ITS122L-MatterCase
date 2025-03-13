@@ -1,8 +1,8 @@
 <?php
-include_once("encryption.php");
-include_once("config.php"); 
-include_once("audit_log.php"); 
-include_once("email_unique.php"); 
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/config.php"); 
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php"); 
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/email_unique.php"); 
 
 //session check
 session_start();

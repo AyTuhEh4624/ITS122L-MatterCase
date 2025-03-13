@@ -2,12 +2,14 @@
 // Create database connection using config file
 include_once("config.php");
 include_once("decrypt.php");
+include_once("encryption.php");
 // Encryption key and method
 $key = 'somebodyoncetoldmetheworldwasgonnarollmeiaintthesharpesttoolintheshed';
 $method = 'AES-256-CBC';
 
 // Fetch all users data from database
 $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
+
 ?>
 
 <html>
@@ -29,7 +31,7 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
         // Decrypt the data
         $firstname = decryptData($user_data['first_name'], $key, $method);
         $lastname = decryptData($user_data['last_name'], $key, $method);
-        $username = decryptData($user_data['username'], $key, $method);
+        $username = $user_data['username'];
         $email = decryptData($user_data['email'], $key, $method);
 
         echo "<tr>";
@@ -41,7 +43,7 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
     }
     ?>
     </table>
-
+    <a href="dashboard_admin.php">Home</a>
     <a href="logout.php">Log out </a>
 
 </body>

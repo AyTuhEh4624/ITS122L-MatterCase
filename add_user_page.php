@@ -1,8 +1,8 @@
 <?php
 include_once("encryption.php");
 include_once("config.php"); 
-include_once("auditlog.php"); 
-include_once("emailunique.php"); 
+include_once("audit_log.php"); 
+include_once("email_unique.php"); 
 
 //session check
 session_start();

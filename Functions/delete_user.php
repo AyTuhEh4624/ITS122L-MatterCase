@@ -1,7 +1,7 @@
 <?php
 
 include_once("config.php");
-
+include_once("audit_log.php");
 // Get id from URL to delete that user
 $id = $_GET['id'];
 

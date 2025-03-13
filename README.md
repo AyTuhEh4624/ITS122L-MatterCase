@@ -1,2 +1,2 @@
-# CSS151L-Group-7-MatterCase-
+# ITS122L-MatterCase
 Github but for Lawyers

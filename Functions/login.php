@@ -4,6 +4,7 @@ session_start();
 // Include the encryption file
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php");
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
@@ -44,6 +45,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $login_successful = true;
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $row['id'];
+
+            // Log the login action
+            $user_id = $row['id'];
+            $action = "User logged in";
+            logAction($conn, $user_id, $action);
 
             // Check usertype
             //0 - admin

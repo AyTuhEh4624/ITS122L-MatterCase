@@ -16,7 +16,7 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
 <head>    
     <title>Homepage</title>
 </head>
-<form method="POST" action="add.php">
+<form method="POST" action="add_user_page.php">
 <body>
     <h2>Welcome Administrator</h2><br />
     <input type="submit" name="submit" value="Add New User"> <br /><br />

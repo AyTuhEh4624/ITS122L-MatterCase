@@ -4,5 +4,5 @@
    unset($_SESSION["password"]);
    
    echo 'You logged out';
-   header('Refresh: 1; URL = login.php');
+   header('Refresh: 1; URL = login_page.php');
 ?>

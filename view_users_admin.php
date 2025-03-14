@@ -10,15 +10,14 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
 
 <html>
 <head>    
-    <title>Homepage</title>
+    <title>View Users</title>
 </head>
 <body>
-    <h2>Welcome Administrator</h2><br />
     <form method="POST" action="add_user_page.php">
         <input type="submit" name="submit" value="Add New User"> <br /><br />
     </form>
 
-    <table width='80%' border=1>
+    <table>
         <tr>
             <th>Firstname</th> 
             <th>Lastname</th> 
@@ -46,7 +45,7 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
         }
         ?>
     </table>
-    <a href="dashboard_admin.php">Home</a>
+    <a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'dashboard_admin.php'; ?>">Back to Previous Page</a>
     <a href="logout.php">Log out</a>
 </body>
 </html>

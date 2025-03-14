@@ -65,7 +65,7 @@ function updateUserProfile($conn, $user_id, $first_name, $last_name, $email, $us
 }
 
 function isAdmin($usertype) {
-    return $usertype == 0;
+    return $usertype == 0 || $usertype == 1;
 }
 
 function canEditProfile($logged_in_user_id, $logged_in_usertype, $target_user_id) {

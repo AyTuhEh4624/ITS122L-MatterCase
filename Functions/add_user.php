@@ -30,7 +30,7 @@ function addUser($conn, $first_name, $last_name, $email, $pass, $usertype, $user
 
         // Log the action in the audit log
         $action = "Added new user with ID: $new_user_id, Username: $username, Usertype: $usertype";
-        logAction($conn, $actor_id, $action);
+        logAction($conn, $actor_id, $action, $key, $method);
 
         $stmt->close();
         return "User added successfully. <a href='view_users_admin.php'>View Users</a>";

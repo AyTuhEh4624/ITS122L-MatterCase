@@ -2,6 +2,7 @@
 session_start();
 
 // Include the database connection and audit log function
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php");
 
 // Database credentials
@@ -23,7 +24,7 @@ if (mysqli_connect_errno()) {
 if (isset($_SESSION['id'])) {
     $user_id = $_SESSION['id'];
     $action = "User logged out";
-    logAction($conn, $user_id, $action);
+    logAction($conn, $user_id, $action, $key, $method);
 }
 
 // Unset all session variables

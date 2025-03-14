@@ -1,4 +1,8 @@
 <?php
+// Define the encryption key and method as variables
+$key = 'somebodyoncetoldmetheworldwasgonnarollmeiaintthesharpesttoolintheshed';
+$method = 'AES-256-CBC';
+
 function decryptData($encryptedData, $key, $method) {
     // Decode the base64 encoded data
     $data = base64_decode($encryptedData);

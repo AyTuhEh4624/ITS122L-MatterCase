@@ -45,18 +45,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $login_successful = true;
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $row['id'];
+            $_SESSION['usertype'] = $row['usertype']; 
 
             // Log the login action
             $user_id = $row['id'];
             $action = "User logged in";
-            logAction($conn, $user_id, $action);
+            logAction($conn, $user_id, $action, $key, $method);
 
-            // Check usertype
-            //0 - admin
-            //1 - partner
-            //2 - lawyer
-            //3 - paralegal
-            //4 - messenger
             switch($row["usertype"]){
                 case 0:
                     header('Location: dashboard_admin.php');

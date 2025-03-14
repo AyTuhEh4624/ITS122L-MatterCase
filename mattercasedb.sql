@@ -33,7 +33,7 @@ CREATE TABLE matters (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Clients Table: Clients belong to a specific matter but can have multiple cases under that matter
+-- Clients Table: Clients belong to a specific matter but can have multiple cases
 CREATE TABLE clients (
     client_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     matter_id INT(11) NOT NULL,
@@ -60,6 +60,18 @@ CREATE TABLE cases (
     INDEX (client_id),
     FOREIGN KEY (matter_id) REFERENCES matters(matter_id) ON DELETE CASCADE,
     FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Forms Table: Stores submitted forms related to cases
+CREATE TABLE forms (
+    form_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    case_id INT(11) NOT NULL,
+    form_title VARCHAR(255) NOT NULL,
+    file_path VARCHAR(255) NOT NULL,
+    submission_status ENUM('Submitted', 'Pending', 'Rejected') DEFAULT 'Pending',
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX (case_id),
+    FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Case Lawyers Table (Many-to-Many Relationship)
@@ -91,7 +103,7 @@ CREATE TABLE case_fees (
     case_id INT(11) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     fee_description TEXT,
-    status ENUM('Unpaid', 'Paid', 'Overdue') DEFAULT 'Unpaid',
+    payment_status ENUM('Unpaid', 'Paid', 'Overdue') DEFAULT 'Unpaid',
     due_date DATE,
     INDEX (case_id),
     FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE
@@ -103,7 +115,7 @@ CREATE TABLE invoices (
     client_id INT(11) NOT NULL,
     case_id INT(11) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
-    status ENUM('Pending', 'Paid') DEFAULT 'Pending',
+    payment_status ENUM('Pending', 'Paid') DEFAULT 'Pending',
     issue_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     due_date DATE,
     INDEX (client_id),
@@ -119,6 +131,7 @@ CREATE TABLE evidence (
     evidence_type VARCHAR(255),
     file_path VARCHAR(255),
     description TEXT,
+    submission_status ENUM('Submitted', 'Pending', 'Rejected') DEFAULT 'Pending',
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX (case_id),
     FOREIGN KEY (case_id) REFERENCES cases(case_id) ON DELETE CASCADE

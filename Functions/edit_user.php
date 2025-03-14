@@ -64,12 +64,12 @@ function updateUserProfile($conn, $user_id, $first_name, $last_name, $email, $us
     }
 }
 
-function isAdmin($usertype) {
+function isAllowed($usertype) {
     return $usertype == 0 || $usertype == 1;
 }
 
 function canEditProfile($logged_in_user_id, $logged_in_usertype, $target_user_id) {
     // Admins can edit any profile, regular users can only edit their own
-    return isAdmin($logged_in_usertype) || $logged_in_user_id == $target_user_id;
+    return isAllowed($logged_in_usertype) || $logged_in_user_id == $target_user_id;
 }
 ?>

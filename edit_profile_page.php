@@ -95,7 +95,7 @@ if (isset($_POST['update'])) {
     <title>Edit User Data</title>
 </head>
 <body>
-    <a href="dashboard_admin.php">Back to Dashboard</a>
+<a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'dashboard_admin.php'; ?>">Back to Dashboard</a>
     <br/><br/>
     
     <form name="update_user" method="post" action="edit_profile_page.php">

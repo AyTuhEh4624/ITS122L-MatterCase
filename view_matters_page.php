@@ -17,13 +17,26 @@ if ($usertype == 3 || $usertype == 4) {
     exit();
 }
 
-// Connect to the database
 $conn = new mysqli('localhost', 'root', '', 'mattercase');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-// Fetch all clients
-$query = "SELECT * FROM clients";
+
+// Fetch matters based on user role
+if ($usertype == 0 || $usertype == 1) {
+    // Admin and Partner can see all matters
+    $query = "SELECT * FROM matters";
+} elseif ($usertype == 2) {
+    // Lawyers can only see matters assigned to them
+    $query = "
+        SELECT DISTINCT m.* 
+        FROM matters m
+        JOIN cases c ON m.matter_id = c.matter_id
+        JOIN case_lawyers cl ON c.case_id = cl.case_id
+        WHERE cl.lawyer_id = $user_id
+    ";
+}
+
 $result = $conn->query($query);
 $data = $result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -32,10 +45,10 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clients</title>
+    <title>Matters</title>
 </head>
 <body>
-    <h1>Clients</h1>
+    <h1>Matters</h1>
     <table border="1">
         <thead>
             <tr>
@@ -54,7 +67,7 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($value); ?></td>
                     <?php endforeach; ?>
                     <td>
-                        <a href="cases.php?client_id=<?php echo $row['client_id']; ?>">View Client Details</a>
+                        <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>">View Cases</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

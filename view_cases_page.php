@@ -11,19 +11,24 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 $usertype = $_SESSION['usertype'];
 
-// Restrict access to Paralegals and Messengers
-if ($usertype == 3 || $usertype == 4) {
-    header('Location: view_cases_page.php');
-    exit();
-}
-
 // Connect to the database
 $conn = new mysqli('localhost', 'root', '', 'mattercase');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
-// Fetch all clients
-$query = "SELECT * FROM clients";
+
+// Fetch cases based on matter_id or client_id
+if (isset($_GET['matter_id'])) {
+    $matter_id = $_GET['matter_id'];
+    $query = "SELECT * FROM cases WHERE matter_id = $matter_id";
+} elseif (isset($_GET['client_id'])) {
+    $client_id = $_GET['client_id'];
+    $query = "SELECT * FROM cases WHERE client_id = $client_id";
+} else {
+    // Paralegals and Messengers start here
+    $query = "SELECT * FROM cases";
+}
+
 $result = $conn->query($query);
 $data = $result->fetch_all(MYSQLI_ASSOC);
 ?>
@@ -32,10 +37,10 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Clients</title>
+    <title>Cases</title>
 </head>
 <body>
-    <h1>Clients</h1>
+    <h1>Cases</h1>
     <table border="1">
         <thead>
             <tr>
@@ -54,7 +59,7 @@ $data = $result->fetch_all(MYSQLI_ASSOC);
                         <td><?php echo htmlspecialchars($value); ?></td>
                     <?php endforeach; ?>
                     <td>
-                        <a href="cases.php?client_id=<?php echo $row['client_id']; ?>">View Client Details</a>
+                        <a href="view_case_details.php?case_id=<?php echo $row['case_id']; ?>">View Case Details</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -123,26 +123,41 @@ $invoices = $conn->query("SELECT * FROM invoices WHERE case_id = $case_id")->fet
     </tbody>
 </table>
 
-
-
     <!-- Evidence -->
     <h3>Evidence</h3>
+    <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
+        <p><a href="add_evidence_page.php?case_id=<?php echo $case_id; ?>">Add New Evidence</a></p>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>
                 <th>Evidence ID</th>
+                <th>Evidence Type</th>
+                <th>File</th>
                 <th>Description</th>
-                <th>Submitted By</th>
-                <th>Submitted At</th>
+                <th>Submission Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($evidence as $item): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($item['evidence_id']); ?></td>
+                    <td><?php echo htmlspecialchars($item['evidence_type']); ?></td>
+                    <td>
+                        <?php if (!empty($item['file_path'])): ?>
+                            <a href="view_file.php?file=<?php echo urlencode($item['file_path']); ?>" target="_blank">View File</a>
+                        <?php else: ?>
+                            No file uploaded
+                        <?php endif; ?>
+                    </td>
                     <td><?php echo htmlspecialchars($item['description']); ?></td>
-                    <td><?php echo htmlspecialchars($item['submitted_by']); ?></td>
-                    <td><?php echo htmlspecialchars($item['submitted_at']); ?></td>
+                    <td><?php echo htmlspecialchars($item['submission_status']); ?></td>
+                    <td>
+                        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
+                            <a href="edit_evidence_page.php?evidence_id=<?php echo $item['evidence_id']; ?>">Edit</a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -150,22 +165,39 @@ $invoices = $conn->query("SELECT * FROM invoices WHERE case_id = $case_id")->fet
 
     <!-- Forms -->
     <h3>Forms</h3>
+    <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
+        <p><a href="add_form_page.php?case_id=<?php echo $case_id; ?>">Add New Form</a></p>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>
                 <th>Form ID</th>
-                <th>Form Name</th>
-                <th>Submitted By</th>
-                <th>Submitted At</th>
+                <th>Form Title</th>
+                <th>Submission Status</th>
+                <th>Uploaded At</th>
+                <th>File</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($forms as $form): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($form['form_id']); ?></td>
-                    <td><?php echo htmlspecialchars($form['form_name']); ?></td>
-                    <td><?php echo htmlspecialchars($form['submitted_by']); ?></td>
-                    <td><?php echo htmlspecialchars($form['submitted_at']); ?></td>
+                    <td><?php echo htmlspecialchars($form['form_title']); ?></td>
+                    <td><?php echo htmlspecialchars($form['submission_status']); ?></td>
+                    <td><?php echo htmlspecialchars($form['uploaded_at']); ?></td>
+                    <td>
+                        <?php if (!empty($form['file_path'])): ?>
+                            <a href="view_file.php?file=<?php echo urlencode($form['file_path']); ?>" target="_blank">View File</a>
+                        <?php else: ?>
+                            No file uploaded
+                        <?php endif; ?>
+                    </td>
+                    <td>
+                        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
+                            <a href="edit_form_page.php?form_id=<?php echo $form['form_id']; ?>">Edit</a>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

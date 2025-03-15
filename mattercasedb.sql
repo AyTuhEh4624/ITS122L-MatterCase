@@ -153,16 +153,6 @@ CREATE TABLE audit_log (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Client Matters Table: Keeps track of client's information --
-CREATE TABLE client_matters (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    client_id INT NOT NULL,
-    matter_id INT NOT NULL,
-    FOREIGN KEY (client_id) REFERENCES clients(client_id),
-    FOREIGN KEY (matter_id) REFERENCES matters(matter_id)
-);
-
-
 -- test admin
 -- email: admin@email.com
 -- password: password

@@ -52,30 +52,17 @@ foreach ($data as &$row) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Matters</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>View Matters</h1>
-
-    <?php if ($usertype == 0 || $usertype == 1): ?>
-        <p><a href="add_matter_page.php">Add New Matter</a></p>
-    <?php endif; ?>
-
-    <p>
-        <a href="<?php
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex justify-between items-center">
+            <span class="text-lg">Client <span class="text-green-400">Matters</span></span>
+            <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+            <a href="<?php
             // Redirect to the appropriate dashboard based on usertype
             switch ($usertype) {
                 case 0: // Admin
@@ -97,12 +84,16 @@ foreach ($data as &$row) {
                     echo 'login_page.php'; // Fallback to login page
                     break;
             }
-        ?>">Back to Dashboard</a>
-    </p>
+        ?>"><button class="text-gray-300">Dashboard</button></a>
+        </div>
 
-    <!-- Display Existing Matters -->
-    <h2>Existing Matters</h2>
-    <table>
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-2">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+            <?php if ($usertype == 0 || $usertype == 1): ?>
+        <a href="add_matter_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Matter</button></a>
+    <?php endif; ?>
+            <table width="90%">
         <thead>
             <tr>
                 <?php if (!empty($data)): ?>
@@ -135,5 +126,8 @@ foreach ($data as &$row) {
             <?php endforeach; ?>
         </tbody>
     </table>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

@@ -15,7 +15,7 @@ if (!isset($_SESSION['username'])) {
 $conn = connectToDatabase();
 
 // Determine the user ID to edit
-if (isset($_GET['id']) && isAllowed($_SESSION['usertype'])) {
+if (isset($_GET['id']) && isAdmin($_SESSION['usertype'])) {
     // Admin can edit any profile
     $edit_user_id = $_GET['id'];
 } else {
@@ -95,33 +95,8 @@ if (isset($_POST['update'])) {
     <title>Edit User Data</title>
 </head>
 <body>
-    <p>
-        <a href="<?php
-            $usertype = $_SESSION['usertype'];
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: // Admin
-                    echo 'dashboard_admin.php';
-                    break;
-                case 1: // Partner
-                    echo 'dashboard_partner.php';
-                    break;
-                case 2: // Lawyer
-                    echo 'dashboard_lawyer.php';
-                    break;
-                case 3: // Paralegal
-                    echo 'dashboard_paralegal.php';
-                    break;
-                case 4: // Messenger
-                    echo 'dashboard_messenger.php';
-                    break;
-                default:
-                    echo 'login_page.php'; // Fallback to login page
-                    break;
-            }
-        ?>">Back to Dashboard</a>
-        </p>
-        <br/><br/>
+<a href="<?php echo isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'dashboard_admin.php'; ?>">Back to Dashboard</a>
+    <br/><br/>
     
     <form name="update_user" method="post" action="edit_profile_page.php">
         <table border="0">

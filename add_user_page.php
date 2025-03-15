@@ -4,7 +4,7 @@ if (!isset($_SESSION['id'])) {
     header('Location: login.php'); 
     exit();
 }
-$usertype = $_SESSION['usertype'];
+
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/add_user.php");
 
 // Check if the form was submitted
@@ -31,29 +31,7 @@ if (isset($_POST['Submit'])) {
     <title>Add Users</title>
 </head>
 <body>
-    <a href="<?php
-        // Redirect to the appropriate dashboard based on usertype
-        switch ($usertype) {
-            case 0: // Admin
-                echo 'dashboard_admin.php';
-                break;
-            case 1: // Partner
-                echo 'dashboard_partner.php';
-                break;
-            case 2: // Lawyer
-                echo 'dashboard_lawyer.php';
-                break;
-            case 3: // Paralegal
-                echo 'dashboard_paralegal.php';
-                break;
-            case 4: // Messenger
-                echo 'dashboard_messenger.php';
-                break;
-            default:
-                echo 'login_page.php'; // Fallback to login page
-                break;
-        }
-    ?>">Back to Dashboard</a>
+    <a href="login.php">Home</a>
     <br/><br/>
 
     <form action="add_user_page.php" method="post" name="form1">

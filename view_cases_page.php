@@ -1,8 +1,7 @@
 <?php
 session_start();
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/lawyer_assignment.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php"); // Include decryption function
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
 
 // Check if the user is logged in
 if (!isset($_SESSION['id'])) {
@@ -17,17 +16,6 @@ $usertype = $_SESSION['usertype'];
 $conn = new mysqli('localhost', 'root', '', 'mattercase');
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
-}
-
-// Handle lawyer assignment form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_lawyers'])) {
-    $case_id = $_POST['case_id'];
-    $lawyer_ids = $_POST['lawyer_ids']; // Array of lawyer IDs
-
-    // Assign lawyers to the case
-    assignLawyersToCase($conn, $case_id, $lawyer_ids);
-
-    echo "<p>Lawyers assigned successfully!</p>";
 }
 
 // Fetch cases based on matter_id or client_id
@@ -141,10 +129,8 @@ foreach ($data as &$row) {
                     <th>Status</th>
                     <th>Client Name</th>
                     <th>Matter Title</th>
-                    <th>Assigned Lawyers</th>
                     <th>Created At</th>
                     <th>Action</th>
-                    <th>Assign Lawyers</th>
                 <?php endif; ?>
             </tr>
         </thead>
@@ -158,19 +144,6 @@ foreach ($data as &$row) {
                     <td><?php echo htmlspecialchars($row['status']); ?></td>
                     <td><?php echo htmlspecialchars($row['client_name']); ?></td>
                     <td><?php echo htmlspecialchars($row['matter_title']); ?></td>
-                    <td>
-                        <?php
-                        // Fetch assigned lawyers for this case
-                        $assigned_lawyers = fetchAssignedLawyersForCase($conn, $row['case_id'], $key, $method);
-                        if (!empty($assigned_lawyers)) {
-                            foreach ($assigned_lawyers as $lawyer) {
-                                echo htmlspecialchars($lawyer['first_name'] . ' ' . $lawyer['last_name']) . "<br>";
-                            }
-                        } else {
-                            echo "No lawyers assigned.";
-                        }
-                        ?>
-                    </td>
                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                     <td>
                         <!-- View Case Details Link -->
@@ -180,22 +153,6 @@ foreach ($data as &$row) {
                             | <a href="edit_case_page.php?case_id=<?php echo $row['case_id']; ?>">Edit</a>
                         <?php endif; ?>
                     </td>
-                    <td>
-                        <form method="POST" action="view_cases_page.php" style="display: inline;">
-                            <input type="hidden" name="case_id" value="<?php echo $row['case_id']; ?>">
-                            <select name="lawyer_ids[]" multiple required>
-                                <?php
-                                $lawyers = fetchAndDecryptLawyers($conn, $key, $method);
-                                foreach ($lawyers as $lawyer): ?>
-                                    <option value="<?php echo $lawyer['id']; ?>">
-                                        <?php echo htmlspecialchars($lawyer['first_name'] . ' ' . $lawyer['last_name']); ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                            <button type="submit" name="assign_lawyers">Assign</button>
-                        </form>
-                    </td>
-                    
                 </tr>
             <?php endforeach; ?>
         </tbody>

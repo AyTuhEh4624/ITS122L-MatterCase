@@ -1,22 +1,10 @@
 <?php
-// Start the session
-session_start();
-
-// Include necessary files
+// Create database connection using config file
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/config.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
 
-// Check if the user is logged in
-if (!isset($_SESSION['id'])) {
-    header('Location: login_page.php');
-    exit();
-}
-
-$user_id = $_SESSION['id'];
-$usertype = $_SESSION['usertype'];
-
-// Fetch all users data from the database
+// Fetch all users data from database
 $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
 ?>
 
@@ -57,34 +45,7 @@ $result = mysqli_query($conn, "SELECT * FROM users ORDER BY id DESC");
         }
         ?>
     </table>
-
-    <!-- Back to Dashboard Button -->
-    <p>
-        <a href="<?php
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: // Admin
-                    echo 'dashboard_admin.php';
-                    break;
-                case 1: // Partner
-                    echo 'dashboard_partner.php';
-                    break;
-                case 2: // Lawyer
-                    echo 'dashboard_lawyer.php';
-                    break;
-                case 3: // Paralegal
-                    echo 'dashboard_paralegal.php';
-                    break;
-                case 4: // Messenger
-                    echo 'dashboard_messenger.php';
-                    break;
-                default:
-                    echo 'login_page.php'; // Fallback to login page
-                    break;
-            }
-        ?>">Back to Dashboard</a>
-    </p>
-
+    <a href="dashboard_admin.php">Back to Dashboard</a>
     <a href="logout.php">Log out</a>
 </body>
 </html>

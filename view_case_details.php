@@ -39,6 +39,29 @@ $invoices = $conn->query("SELECT * FROM invoices WHERE case_id = $case_id")->fet
 </head>
 <body>
     <h1>Case Details</h1>
+    <a href="<?php
+        // Redirect to the appropriate dashboard based on usertype
+        switch ($usertype) {
+            case 0: // Admin
+                echo 'dashboard_admin.php';
+                break;
+            case 1: // Partner
+                echo 'dashboard_partner.php';
+                break;
+            case 2: // Lawyer
+                echo 'dashboard_lawyer.php';
+                break;
+            case 3: // Paralegal
+                echo 'dashboard_paralegal.php';
+                break;
+            case 4: // Messenger
+                echo 'dashboard_messenger.php';
+                break;
+            default:
+                echo 'login_page.php'; // Fallback to login page
+                break;
+        }
+    ?>">Back to Dashboard</a>
     <h2>Case: <?php echo htmlspecialchars($case['case_title']); ?></h2>
 
     <h3>Case Updates</h3>

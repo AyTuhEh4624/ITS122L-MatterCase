@@ -24,7 +24,7 @@ CREATE TABLE users (
     PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Matters Table: Contains legal matters, each having multiple clients and cases
+-- Matters Table: Contains legal matters, each having multiple cases
 CREATE TABLE matters (
     matter_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
@@ -33,16 +33,22 @@ CREATE TABLE matters (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Clients Table: Clients belong to a specific matter but can have multiple cases
+-- Clients Table: Clients can optionally be related to a matter
 CREATE TABLE clients (
     client_id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    matter_id INT(11) NOT NULL,
     client_name VARCHAR(255) NOT NULL,
     email VARCHAR(100) DEFAULT NULL UNIQUE,
     address TEXT DEFAULT NULL,
     profile_picture VARCHAR(255) DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX (matter_id),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- Junction Table: client_matters
+CREATE TABLE client_matters (
+    client_id INT(11) NOT NULL,
+    matter_id INT(11) NOT NULL,
+    PRIMARY KEY (client_id, matter_id),
+    FOREIGN KEY (client_id) REFERENCES clients(client_id) ON DELETE CASCADE,
     FOREIGN KEY (matter_id) REFERENCES matters(matter_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -150,7 +156,7 @@ CREATE TABLE audit_log (
 -- test admin
 -- email: admin@email.com
 -- password: password
-INSERT INTO users (id, usertype,email, pass)
+INSERT INTO users (id, usertype, email, pass)
 VALUES (1, 0, 'RDFAhvI7KF2y4RH6OPZJZGJLY0pxS2JvNFRPZS82THB3WUYwWVE9PQ==', '+lFCT9HtHdx4AwBuhiWSNkhqbWRJRUFCTVgvcHlIQjFKek9BZFE9PQ==');
 
 COMMIT;

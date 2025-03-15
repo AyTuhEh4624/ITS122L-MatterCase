@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <button type="submit">Update Matter</button>
     </form>
-
+        
     <p><a href="view_matters_page.php">Back to View Matters</a></p>
 </body>
 </html>

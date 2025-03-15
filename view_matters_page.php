@@ -70,12 +70,10 @@ foreach ($data as &$row) {
 <body>
     <h1>View Matters</h1>
 
-    <!-- Link to Add Matters Page (Only for Admins and Partners) -->
     <?php if ($usertype == 0 || $usertype == 1): ?>
         <p><a href="add_matter_page.php">Add New Matter</a></p>
     <?php endif; ?>
 
-    <!-- Back to Dashboard Button -->
     <p>
         <a href="<?php
             // Redirect to the appropriate dashboard based on usertype

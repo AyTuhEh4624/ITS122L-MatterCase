@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
-
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
 // Check if the user is logged in
 if (!isset($_SESSION['id'])) {
     header('Location: login_page.php');

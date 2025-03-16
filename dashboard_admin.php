@@ -33,7 +33,8 @@ if (!isset($_SESSION['username']) || $_SESSION['usertype'] != 0) {
                          alt="Logo" class="w-16 mx-auto mb-2">
                 </div>
                 <h1 class="text-3xl font-semibold">Welcome!</h1>
-                <p class="text-lg text-gray-300 mt-1">John Lee</p>
+                <p class="text-lg text-gray-300 mt-1"><?php echo htmlspecialchars($_SESSION['uname']); ?></p>
+                <p class="text-lg text-gray-300 mt-1"><?php echo htmlspecialchars($_SESSION['fname']); ?> <?php echo htmlspecialchars($_SESSION['lname']); ?></p>
                 <a href="edit_profile_page.php"><button class="mt-2 px-4 py-1 bg-gray-200 text-gray-800 rounded text-sm">Edit profile</button></a>
                 <hr class="my-6 border-gray-600">
 

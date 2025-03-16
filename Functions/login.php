@@ -43,9 +43,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Check if the decrypted username and pass match the input
         if ($username === $decrypted_username && $pass === $decrypted_pass) {
             $login_successful = true;
+
+            // Store user information in the session
             $_SESSION['username'] = $username;
             $_SESSION['id'] = $row['id'];
-            $_SESSION['usertype'] = $row['usertype']; 
+            $_SESSION['usertype'] = $row['usertype'];
+            $_SESSION['uname'] = $row['username']; // Store the username
+            $_SESSION['fname'] = decryptData($row['first_name'],$key, $method); // Store the first name
+            $_SESSION['lname'] = decryptData($row['last_name'],$key, $method); // Store the last name
 
             // Log the login action
             $user_id = $row['id'];

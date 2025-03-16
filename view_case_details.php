@@ -1,39 +1,6 @@
 <?php
-session_start();
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php"); // Include decryption function
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
-
-// Check if the user is logged in
-if (!isset($_SESSION['id'])) {
-    header('Location: login_page.php');
-    exit();
-}
-
-$user_id = $_SESSION['id'];
-$usertype = $_SESSION['usertype'];
-
-// Connect to the database
-$conn = new mysqli('localhost', 'root', '', 'mattercase');
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Fetch case details
-$case_id = $_GET['case_id'];
-$query = "SELECT * FROM cases WHERE case_id = $case_id";
-$result = $conn->query($query);
-$case = $result->fetch_assoc();
-
-// Decrypt case title and court
-$case['case_title'] = decryptData($case['case_title'], $key, $method);
-$case['court'] = decryptData($case['court'], $key, $method);
-
-// Fetch related data
-$case_updates = $conn->query("SELECT * FROM case_updates WHERE case_id = $case_id")->fetch_all(MYSQLI_ASSOC);
-$case_fees = $conn->query("SELECT * FROM case_fees WHERE case_id = $case_id")->fetch_all(MYSQLI_ASSOC);
-$evidence = $conn->query("SELECT * FROM evidence WHERE case_id = $case_id")->fetch_all(MYSQLI_ASSOC);
-$forms = $conn->query("SELECT * FROM forms WHERE case_id = $case_id")->fetch_all(MYSQLI_ASSOC);
-$invoices = $conn->query("SELECT * FROM invoices WHERE case_id = $case_id")->fetch_all(MYSQLI_ASSOC);
+// Include the logic file
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/view_case_details.php"); 
 ?>
 
 <!DOCTYPE html>
@@ -91,37 +58,37 @@ $invoices = $conn->query("SELECT * FROM invoices WHERE case_id = $case_id")->fet
     <p><strong>Status:</strong> <?php echo htmlspecialchars($case['status']); ?></p>
     <p><strong>Created At:</strong> <?php echo htmlspecialchars($case['created_at']); ?></p>
 
-<!-- Case Updates -->
-<h3>Case Updates</h3>
-<?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
-    <p><a href="add_case_update_page.php?case_id=<?php echo $case_id; ?>">Add New Update</a></p>
-<?php endif; ?>
-<table>
-    <thead>
-        <tr>
-            <th>Update ID</th>
-            <th>Update Text</th>
-            <th>Updated By</th>
-            <th>Updated At</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        <?php foreach ($case_updates as $update): ?>
+    <!-- Case Updates -->
+    <h3>Case Updates</h3>
+    <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
+        <p><a href="add_case_update_page.php?case_id=<?php echo $case_id; ?>">Add New Update</a></p>
+    <?php endif; ?>
+    <table>
+        <thead>
             <tr>
-                <td><?php echo htmlspecialchars($update['update_id']); ?></td>
-                <td><?php echo htmlspecialchars($update['update_text']); ?></td>
-                <td><?php echo htmlspecialchars($update['updated_by']); ?></td>
-                <td><?php echo htmlspecialchars($update['updated_at']); ?></td>
-                <td>
-                    <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
-                        <a href="edit_case_update_page.php?update_id=<?php echo $update['update_id']; ?>">Edit</a>
-                    <?php endif; ?>
-                </td>
+                <th>Update ID</th>
+                <th>Update Text</th>
+                <th>Updated By</th>
+                <th>Updated At</th>
+                <th>Action</th>
             </tr>
-        <?php endforeach; ?>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <?php foreach ($case_updates as $update): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($update['update_id']); ?></td>
+                    <td><?php echo htmlspecialchars($update['update_text']); ?></td>
+                    <td><?php echo htmlspecialchars($update['updated_by']); ?></td>
+                    <td><?php echo htmlspecialchars($update['updated_at']); ?></td>
+                    <td>
+                        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
+                            <a href="edit_case_update_page.php?update_id=<?php echo $update['update_id']; ?>">Edit</a>
+                        <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 
     <!-- Evidence -->
     <h3>Evidence</h3>

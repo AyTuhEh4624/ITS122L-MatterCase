@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
-
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php"); // Include encryption function
 // Check if the user is logged in
 if (!isset($_SESSION['id'])) {
     header('Location: login_page.php');
@@ -59,9 +59,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->bind_param("isss", $case_id, $form_title, $relative_path, $submission_status);
 
                 if ($stmt->execute()) {
+
+                    // Log the action in the audit log
+                    $action = "Added new form $form_title to case ID: $case_id, submission status: $submission_status";
+                    logAction($conn, $user_id, $action, $key, $method);
+
                     // Redirect back to the case details page with a success message
                     header("Location: view_case_details.php?case_id=$case_id&success=1");
                     exit();
+
                 } else {
                     // Redirect back to the add form page with an error message
                     header("Location: add_form_page.php?case_id=$case_id&error=1");

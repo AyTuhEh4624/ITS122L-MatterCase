@@ -1,6 +1,7 @@
 <?php
 session_start();
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php"); 
 
 // Check if the user is logged in
 if (!isset($_SESSION['id'])) {
@@ -39,6 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("sss", $encryptedTitle, $encryptedDescription, $status);
 
     if ($stmt->execute()) {
+        
+        // Log the action in the audit log
+        $action = "Added new matter with title: $title, Status: $status";
+        logAction($conn, $user_id, $action, $key, $method);
         // Redirect back to the view matters page with a success message
         header('Location: view_matters_page.php?success=1');
         exit();

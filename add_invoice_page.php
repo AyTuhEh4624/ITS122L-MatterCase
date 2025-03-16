@@ -2,6 +2,7 @@
 session_start();
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php");
 // Check if the user is logged in
 if (!isset($_SESSION['id'])) {
     header('Location: login_page.php');
@@ -37,6 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->bind_param("iidss", $client_id, $case_id, $amount, $payment_status, $due_date);
 
     if ($stmt->execute()) {
+
+        // Log the action in the audit log
+        $action = "Added new invoice to client ID: $client_id, case ID: $case_id, amount: $amount, due date: $due_date";
+        logAction($conn, $user_id, $action, $key, $method);
         // Redirect back to the case details page with a success message
         header("Location: view_case_details.php?case_id=$case_id&success=1");
         exit();

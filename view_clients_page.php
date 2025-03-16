@@ -24,39 +24,38 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Fetch all clients with their associated matters
-$query = "
-    SELECT c.client_id, 
-           c.client_name, 
-           c.email, 
-           c.address, 
-           c.profile_picture, 
-           c.created_at,
-           GROUP_CONCAT(m.title SEPARATOR ', ') AS matter_names
-    FROM clients c
-    LEFT JOIN client_matters cm ON c.client_id = cm.client_id
+// Fetch all clients
+$clientQuery = "SELECT * FROM clients";
+$clientResult = $conn->query($clientQuery);
+
+if (!$clientResult) {
+    die("Client query failed: " . $conn->error);
+}
+
+$clients = $clientResult->fetch_all(MYSQLI_ASSOC);
+
+// Fetch all client-matter relationships
+$matterQuery = "
+    SELECT cm.client_id, m.title 
+    FROM client_matters cm
     LEFT JOIN matters m ON cm.matter_id = m.matter_id
-    GROUP BY c.client_id
 ";
-$result = $conn->query($query);
-$data = $result->fetch_all(MYSQLI_ASSOC);
+$matterResult = $conn->query($matterQuery);
 
-// Decrypt client data and matter names
-foreach ($data as &$row) {
-    // Decrypt client data
-    $row['client_name'] = decryptData($row['client_name'], $key, $method);
-    $row['email'] = decryptData($row['email'], $key, $method);
-    $row['address'] = decryptData($row['address'], $key, $method);
-    $row['profile_picture'] = decryptData($row['profile_picture'], $key, $method);
+if (!$matterResult) {
+    die("Matter query failed: " . $conn->error);
+}
 
-    // Decrypt matter names if they exist
-    if (!empty($row['matter_names'])) {
-        $matter_names = explode(', ', $row['matter_names']);
-        $decrypted_matter_names = array_map(function ($name) use ($key, $method) {
-            return decryptData($name, $key, $method);
-        }, $matter_names);
-        $row['matter_names'] = implode(', ', $decrypted_matter_names);
+$matters = $matterResult->fetch_all(MYSQLI_ASSOC);
+
+// Organize matters by client_id
+$mattersByClient = [];
+foreach ($matters as $matter) {
+    $clientId = $matter['client_id'];
+    if (!isset($mattersByClient[$clientId])) {
+        $mattersByClient[$clientId] = [];
     }
+    $mattersByClient[$clientId][] = $matter['title'];
 }
 ?>
 
@@ -119,35 +118,42 @@ foreach ($data as &$row) {
     <table>
         <thead>
             <tr>
-                <?php if (!empty($data)): ?>
-                    <?php foreach ($data[0] as $key => $value): ?>
-                        <th><?php echo htmlspecialchars($key); ?></th>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+                <th>Client ID</th>
+                <th>Client Name</th>
+                <th>Email</th>
+                <th>Address</th>
+                <th>Profile Picture</th>
+                <th>Created At</th>
+                <th>Matters</th>
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($data as $row): ?>
+            <?php foreach ($clients as $client): ?>
                 <tr>
-                    <?php foreach ($row as $key => $value): ?>
-                        <td>
-                            <?php 
-                            // Display matter names as a comma-separated list
-                            if ($key === 'matter_names') {
-                                echo htmlspecialchars($value ? $value : 'No matters assigned');
-                            } else {
-                                echo htmlspecialchars($value);
-                            }
-                            ?>
-                        </td>
-                    <?php endforeach; ?>
+                    <td><?php echo htmlspecialchars($client['client_id']); ?></td>
+                    <td><?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?></td>
+                    <td><?php echo htmlspecialchars(decryptData($client['email'], $key, $method)); ?></td>
+                    <td><?php echo htmlspecialchars(decryptData($client['address'], $key, $method)); ?></td>
+                    <td><?php echo htmlspecialchars(decryptData($client['profile_picture'], $key, $method)); ?></td>
+                    <td><?php echo htmlspecialchars($client['created_at']); ?></td>
+                    <td>
+                        <?php
+                        // Get matters for this client
+                        $clientId = $client['client_id'];
+                        $clientMatters = $mattersByClient[$clientId] ?? [];
+                        $decryptedMatters = array_map(function ($matter) use ($key, $method) {
+                            return decryptData($matter, $key, $method);
+                        }, $clientMatters);
+                        echo htmlspecialchars(implode(', ', $decryptedMatters) ?: 'No matters assigned');
+                        ?>
+                    </td>
                     <td>
                         <!-- View Client Details Link -->
-                        <a href="view_cases_page.php?client_id=<?php echo $row['client_id']; ?>">View Details</a>
+                        <a href="view_cases_page.php?client_id=<?php echo $client['client_id']; ?>">View Details</a>
                         <!-- Edit Client Link (Only for Admins and Partners) -->
                         <?php if ($usertype == 0 || $usertype == 1): ?>
-                            | <a href="edit_client_page.php?client_id=<?php echo $row['client_id']; ?>">Edit</a>
+                            | <a href="edit_client_page.php?client_id=<?php echo $client['client_id']; ?>">Edit</a>
                         <?php endif; ?>
                     </td>
                 </tr>

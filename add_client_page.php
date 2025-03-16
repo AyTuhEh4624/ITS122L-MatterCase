@@ -1,7 +1,8 @@
 <?php
 session_start();
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php"); // Include decryption function
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); // Include encryption function
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php"); 
+include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php"); 
 
 // Check if the user is logged in
 if (!isset($_SESSION['id'])) {
@@ -56,6 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($stmt->execute()) {
         $client_id = $stmt->insert_id; // Get the ID of the newly inserted client
 
+        // Log the action in the audit log
+        $action = "Added new client, Client ID: $client_id, Client name: $client_name, Related matters IDs: $matter_ids";
+        logAction($conn, $user_id, $action, $key, $method);
         // Insert selected matters into the client_matters table
         if (!empty($matter_ids)) {
             $insert_matters_stmt = $conn->prepare("INSERT INTO client_matters (client_id, matter_id) VALUES (?, ?)");

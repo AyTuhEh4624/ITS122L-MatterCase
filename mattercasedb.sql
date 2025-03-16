@@ -156,7 +156,23 @@ CREATE TABLE audit_log (
 -- test admin
 -- email: admin@email.com
 -- password: password
+-- test partner
+-- email: partner@email.com
+-- password: password
+-- test lawyer
+-- email: lawyer@email.com
+-- password: password
+-- test paralegal
+-- email: paralegal@email.com
+-- password: password
+-- test messenger
+-- email: messenger@email.com
+-- password: password
 INSERT INTO users (id, usertype, email, pass)
-VALUES (1, 0, 'RDFAhvI7KF2y4RH6OPZJZGJLY0pxS2JvNFRPZS82THB3WUYwWVE9PQ==', '+lFCT9HtHdx4AwBuhiWSNkhqbWRJRUFCTVgvcHlIQjFKek9BZFE9PQ==');
+VALUES  (1, 0, '1BfLWmgxTK8U50r0Ds+b/XFLTk5BMmFnUVpuZCtEdkVMblF3Mnc9PQ==', 'SXdRtNtI+0663keaj1xJWWowTlZ0QzQyNzloelh4M2dHWmNEYmc9PQ=='),
+        (2, 1, 'gu5QfjRREHLNCD7xJGs7/jBDYXQzTnEwT0FWa3pVdWVCQ2pBMTMvTGFiSnR1OEgvUDRYVlFkK2VDeU09', '1MCRV9rqNBAXdL1OFdC0RDlBcGNzVElndngxUlRhRlIzY01BQUE9PQ=='),
+        (3, 2, 'nlix8i5uVPwmNh50KlnG8m5QTjhUMTlxSW1kNzBLNlZkRlRnMzF4S01WUTNVTkFCRmxPSXZNeUdES3c9', 'PQaIHuUbH6snG2TdCe4rgXdqUU1ZVDlFcXdjdjlTOUFiSU11NVE9PQ=='),
+        (4, 3, 'VHhqZgXUAWwPnqU6WepgwzUrQ0VwVENaNHNKTndBdVZSRVhBRE1xRW9YVTZnM2xxOFRqdHpCbm9DSTg9', 'vbrs3W1nkP2l5MtQOlfXJkgrdVB2VVJrZ1h1YVJCRWtXbHNzOUE9PQ=='),
+        (5, 4, '3mLFT2aNFdZbHK8addYEpUxUekZLaHFjQkF5U21RdkRHbVd0ZElFeWZWT0RQb0gwUFpqMllxVnB3bm89', 'ICQr2ZYUqqGW9O6XI8oti1YzT1dwaktFMFYyZjhPYXpVNHpXVXc9PQ==');
 
 COMMIT;

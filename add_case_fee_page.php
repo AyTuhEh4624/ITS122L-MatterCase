@@ -58,40 +58,55 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
 <head>
     <meta charset="UTF-8">
     <title>Add Case Fee</title>
+    <link rel="stylesheet" href="css/add_case_fee_page.css">
 </head>
 <body>
-    <h1>Add Case Fee</h1>
+    <div class="top-container">
+        <div class="top-nav">
+            <div class="top-left">
+                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
+                <h1>MatterCase</h1>
+            </div> 
+            <a href="logout.php" >Logout</a>
+        </div>
+    </div>
+
 
     <!-- Display success or error messages -->
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Case fee added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add case fee. Please try again.</p>
-    <?php endif; ?>
+    <div class="main-container">
+        <h2>Add Case Fee</h2>
+        <div class="status-message">
+            <?php if (isset($_GET['success'])): ?>
+                <p style="color: green;">Case fee added successfully!</p>
+            <?php elseif (isset($_GET['error'])): ?>
+                <p style="color: red;">Failed to add case fee. Please try again.</p>
+            <?php endif; ?>
+        </div>
 
-    <!-- Form to Add a New Case Fee -->
-    <form action="add_case_fee_page.php" method="POST">
-        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+        <div class="form">
+            <form action="add_case_fee_page.php" method="POST">
+            <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
 
-        <label for="amount">Amount:</label>
-        <input type="number" id="amount" name="amount" step="0.01" required><br><br>
+            <input type="number" id="amount" class="amount" name="amount" placeholder="Amount" step="0.01" required><br><br>
 
-        <label for="fee_description">Description:</label>
-        <textarea id="fee_description" name="fee_description" required></textarea><br><br>
+            <textarea id="fee_description" name="fee_description" placeholder="Description" required></textarea><br><br>
 
-        <label for="payment_status">Payment Status:</label>
-        <select id="payment_status" name="payment_status" required>
-            <option value="Unpaid">Unpaid</option>
-            <option value="Paid">Paid</option>
-            <option value="Overdue">Overdue</option>
-        </select><br><br>
+            <label for="payment_status">Payment Status:</label>
+            <select id="payment_status" name="payment_status" required>
+                <option value="Unpaid">Unpaid</option>
+                <option value="Paid">Paid</option>
+                <option value="Overdue">Overdue</option>
+            </select><br><br>
 
-        <label for="due_date">Due Date:</label>
-        <input type="date" id="due_date" name="due_date" required><br><br>
-
+            <label for="due_date">Due Date:</label>
+            <input type="date" id="due_date" class="date" name="due_date" required><br><br>
+        </div>
         <button type="submit">Add Fee</button>
     </form>
-
-    <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+    
+        <div class="links">
+            <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+        </div>
+    </div>
 </body>
 </html>

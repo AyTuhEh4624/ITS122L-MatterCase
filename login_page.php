@@ -11,7 +11,7 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/login.ph
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	
     <title>Login</title>
-    <link rel="stylesheet" href="FrontEndTrial/css/login_page.css">
+    <link rel="stylesheet" href="css/login_page.css">
 </head>
 <body>
 	

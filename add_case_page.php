@@ -66,56 +66,77 @@ $matters = $conn->query("SELECT matter_id, title FROM matters");
 <head>
     <meta charset="UTF-8">
     <title>Add Case</title>
+    <link rel="stylesheet" href="css/add_case_page.css">
+
 </head>
 <body>
-    <h1>Add New Case</h1>
+
+    <div class="top-container">
+        <div class="top-nav">
+            <div class="top-left">
+                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
+                <h1>MatterCase</h1>
+            </div> 
+            <a href="logout.php" >Logout</a>
+        </div>
+    </div>
 
     <!-- Display success or error messages -->
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Case added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add case. Please try again.</p>
-    <?php endif; ?>
+    <div class="main-container">
+        <h2>Add Case</h2>
+        <div class="status-message">
+            <?php if (isset($_GET['success'])): ?>
+               <p style="color: green;">Case added successfully!</p>
+            <?php elseif (isset($_GET['error'])): ?>
+                <p style="color: red;">Failed to add case. Please try again.</p>
+            <?php endif; ?>
+        </div>
 
-    <!-- Form to Add a New Case -->
-    <form action="add_case_page.php" method="POST">
-        <label for="case_title">Case Title:</label>
-        <input type="text" id="case_title" name="case_title" required><br><br>
+        <!-- Form to Add a New Case -->
+    <div class="form">
+        <form action="add_case_page.php" method="POST">
+            
+            <input type="text" id="case_title" name="case_title" placeholder="Case Title" required><br><br>
 
-        <label for="court">Court:</label>
-        <input type="text" id="court" name="court" required><br><br>
+            <input type="text" id="court" name="court" placeholder="Court" required><br><br>
 
-        <label for="case_type">Case Type:</label>
-        <input type="text" id="case_type" name="case_type" required><br><br>
+            <input type="text" id="case_type" name="case_type" placeholder="Case Type" required><br><br>
 
-        <label for="status">Status:</label>
-        <select id="status" name="status" required>
-            <option value="Active">Active</option>
-            <option value="Dismissed">Dismissed</option>
-            <option value="Closed">Closed</option>
-        </select><br><br>
+            
 
-        <label for="client_id">Client:</label>
-        <select id="client_id" name="client_id" required>
-            <?php while ($client = $clients->fetch_assoc()): ?>
-                <option value="<?php echo $client['client_id']; ?>">
-                    <?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?>
-                </option>
-            <?php endwhile; ?>
-        </select><br><br>
+            <label for="client_id" >Client:</label>
+            <select id="client_id" name="client_id" class="client" required>
+                <?php while ($client = $clients->fetch_assoc()): ?>
+                    <option value="<?php echo $client['client_id']; ?>">
+                        <?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select><br><br>
 
-        <label for="matter_id">Matter:</label>
-        <select id="matter_id" name="matter_id" required>
-            <?php while ($matter = $matters->fetch_assoc()): ?>
-                <option value="<?php echo $matter['matter_id']; ?>">
-                    <?php echo htmlspecialchars(decryptData($matter['title'], $key, $method)); ?>
-                </option>
-            <?php endwhile; ?>
-        </select><br><br>
+            <label for="matter_id">Matter:</label>
+            <select id="matter_id" name="matter_id" class="matter" required>
+                <?php while ($matter = $matters->fetch_assoc()): ?>
+                    <option value="<?php echo $matter['matter_id']; ?>">
+                        <?php echo htmlspecialchars(decryptData($matter['title'], $key, $method)); ?>
+                    </option>
+                <?php endwhile; ?>
+            </select><br><br>
 
-        <button type="submit">Add Case</button>
-    </form>
+            <label for="status">Status:</label>
+            <select id="status" name="status" class="status" required>
+                <option value="Active">Active</option>
+                <option value="Dismissed">Dismissed</option>
+                <option value="Closed">Closed</option>
+            </select><br><br>
 
-    <p><a href="view_cases_page.php">Back to View Cases</a></p>
+            <button type="submit">Add Case</button>
+        </form>
+        
+        <p><a href="view_cases_page.php">Back to View Cases</a></p>
+    </div>
+    </div>
+
+    
+    
 </body>
 </html>

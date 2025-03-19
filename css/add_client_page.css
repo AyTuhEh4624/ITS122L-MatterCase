@@ -1,0 +1,161 @@
+html{
+    height: 100%;
+}
+
+body{
+    margin: 0;
+  padding: 30px;
+  min-height: 100vh; /* ✅ allow body to grow */
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(154deg, #1B1F3B 50%, #6E7F9A 100%);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* optional: makes it scroll nicely */
+    
+    }
+
+    .top-container {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 0px 30px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        margin-bottom: 20px;
+        box-sizing: content-box;
+    }
+    
+    .top-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .top-left {
+        display: flex;
+        align-items: center;
+        gap: 2%;
+    }
+
+    img {
+        width: 10%; 
+        height: auto;
+        margin-bottom: 2vh;
+        margin-top: 2vh;
+    }
+
+    h1, h2 {
+        color: rgba(255, 255, 255, 0.85);
+        font-family:'Times New Roman', Times, serif;
+        font-weight: 400;
+        font-size: 180%;
+
+    }
+
+    .top-nav a[href="logout.php"]{
+        color: #e78585; 
+        text-decoration: none; 
+        font-weight: bold;
+    }
+
+    .main-container {
+        width: 500px;
+        margin: 0 auto 30px auto;         /* ✅ Center horizontally, spacing at bottom */
+        padding: 20px 30px;
+        background-color: rgba(0, 0, 0, 0.3);
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        text-align: center;
+    }
+
+    input {
+        width: 50%; 
+        padding: 12px;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        letter-spacing: .5px;
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        color: #141414;
+    }
+
+    input::placeholder {
+        color: #666;
+    }
+
+    textarea {
+        width: 50%; 
+        padding: 12px;
+        margin: 0px 0px;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        box-sizing: border-box; 
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        letter-spacing: .5px;
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        color: #141414;
+    }
+
+    textarea::placeholder {
+        color: #666;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 4px; /* ✅ Tight space between label and select */
+        font-weight: 500;
+        color: white;
+        font-size: 15px; /* optional: slightly smaller */
+      }
+
+
+
+    .matter {
+        width: 50%; /* match input and textarea width */
+        padding: 10px;
+        margin: 5px 0;
+        border: none;
+        border-radius: 15px;
+        font-size: 15px;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        letter-spacing: 0.5px;
+        background-color: rgba(255, 255, 255, 0.8);
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        color: #141414;
+        height: auto;
+        min-height: 100px; /* ✅ enough space to show multiple options */
+        overflow-y: auto; /* ✅ enable scrolling if needed */
+}
+
+    
+    button{
+        width: auto; 
+        padding: 12px;
+        margin: 10px 0;
+        border: none;
+        border-radius: 20px;
+        font-size: 16px;
+        box-sizing: border-box; 
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        letter-spacing: .5px;
+        background-color: rgba(242, 180, 24, 0.50);
+        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        color: #ffffff;
+    }
+
+    button:hover {
+        background-color: rgba(242, 180, 24, 0.75);
+      }
+
+    .links a {
+        color:rgba(56, 189, 248, 1);
+        text-decoration: none;
+        font-size: 14px;
+        display: block;
+    }
+    .links a:hover {
+        text-decoration: underline;
+    }

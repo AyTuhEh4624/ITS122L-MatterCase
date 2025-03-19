@@ -89,34 +89,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Add Client</title>
+    <link rel="stylesheet" href="css/add_client_page.css">
 </head>
 <body>
-    <h1>Add New Client</h1>
+    <div class="top-container">
+        <div class="top-nav">
+            <div class="top-left">
+                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
+                <h1>MatterCase</h1>
+            </div> 
+            <a href="logout.php" >Logout</a>
+        </div>
+    </div>
 
     <!-- Display success or error messages -->
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Client added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add client. Please try again.</p>
-    <?php endif; ?>
+    <div class="main-container">
+        <h2>Add Case Fee</h2>
+        <div class="status-message">
+            <?php if (isset($_GET['success'])): ?>
+                <p style="color: green;">Client added successfully!</p>
+            <?php elseif (isset($_GET['error'])): ?>
+                <p style="color: red;">Failed to add client. Please try again.</p>
+            <?php endif; ?>
+        </div>
 
     <!-- Form to Add a New Client -->
+    <div class="form">
     <form action="add_client_page.php" method="POST">
-        <label for="client_name">Client Name:</label>
-        <input type="text" id="client_name" name="client_name" required><br><br>
+        <input type="text" id="client_name" name="client_name" placeholder="Client Name" required><br><br>
 
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required><br><br>
+        <input type="email" id="email" name="email" placeholder="Email" required><br><br>
 
-        <label for="address">Address:</label>
-        <textarea id="address" name="address" required></textarea><br><br>
+        <textarea id="address" name="address" placeholder="Address" required></textarea><br><br>
 
-        <label for="profile_picture">Profile Picture URL:</label>
-        <input type="text" id="profile_picture" name="profile_picture"><br><br>
+        <input type="text" id="profile_picture" name="profile_picture" placeholder="Profile Picture URL"><br><br>
 
         <!-- Multi-select dropdown for matters -->
         <label for="matter_ids">Select Matters:</label>
-        <select id="matter_ids" name="matter_ids[]" multiple>
+        <select id="matter_ids" name="matter_ids[]" class="matter" multiple>
             <?php foreach ($matters as $matter): ?>
                 <option value="<?php echo $matter['matter_id']; ?>">
                     <?php echo htmlspecialchars($matter['title']); ?>
@@ -126,7 +136,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         <button type="submit">Add Client</button>
     </form>
-
-    <p><a href="view_clients_page.php">Back to View Clients</a></p>
+    
+        <div class="links">
+            <p><a href="view_clients_page.php">Back to View Clients</a></p>
+        </div>
+    </div>
+    </div>
 </body>
 </html>

@@ -90,38 +90,45 @@ if (isset($_POST['update'])) {
 ?>
 
 <!DOCTYPE html>
-<html>
-<head>	
-    <title>Edit User Data</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-	<a href="<?php
-		// Redirect to the appropriate dashboard based on usertype
-		switch ($usertype) {
-			case 0: // Admin
-				echo 'dashboard_admin.php';
-				break;
-			case 1: // Partner
-				echo 'dashboard_partner.php';
-				break;
-			case 2: // Lawyer
-				echo 'dashboard_lawyer.php';
-				break;
-			case 3: // Paralegal
-				echo 'dashboard_paralegal.php';
-				break;
-			case 4: // Messenger
-				echo 'dashboard_messenger.php';
-				break;
-			default:
-				echo 'login_page.php'; // Fallback to login page
-				break;
-		}
-	?>">Back to Dashboard</a>
-    <br/><br/>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Edit <span class="text-green-400">Profile</span></span>
     
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
+        </div>
+    </div>
+
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+
+    <div class="flex justify-center items-center mt-4">
     <form name="update_user" method="post" action="edit_profile_page.php">
-        <table border="0">
+        <table border="0" class="mx-auto text-left">
+
             <tr> 
                 <td>First Name</td>
                 <td><input type="text" name="first_name" value="<?php echo htmlspecialchars($first_name); ?>"></td>
@@ -144,9 +151,11 @@ if (isset($_POST['update'])) {
             </tr>
             <tr>
                 <td><input type="hidden" name="id" value="<?php echo $edit_user_id; ?>"></td>
-                <td><input type="submit" name="update" value="Update"></td>
+                <td><input type="submit" name="update" value="Update" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12"></td>
             </tr>
         </table>
-    </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

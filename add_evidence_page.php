@@ -66,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     logAction($conn, $user_id, $action, $key, $method);
 
                     // Redirect back to the case details page with a success message
-                    header("Location: view_case_details.php?case_id=$case_id&success=1");
+                    header("Location: view_case_evidence.php?case_id=$case_id&success=1");
                     exit();
                 } else {
                     // Redirect back to the add evidence page with an error message
@@ -136,6 +136,6 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
         <button type="submit">Add Evidence</button>
     </form>
 
-    <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+    <p><a href="view_case_evidence.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
 </body>
 </html>

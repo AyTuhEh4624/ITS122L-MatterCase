@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $action = "Added new invoice to client ID: $client_id, case ID: $case_id, amount: $amount, due date: $due_date";
         logAction($conn, $user_id, $action, $key, $method);
         // Redirect back to the case details page with a success message
-        header("Location: view_case_details.php?case_id=$case_id&success=1");
+        header("Location: view_case_invoices.php?case_id=$case_id&success=1");
         exit();
     } else {
         // Redirect back to the add invoice page with an error message
@@ -105,6 +105,6 @@ $clients = $conn->query("SELECT client_id, client_name FROM clients");
         <button type="submit">Add Invoice</button>
     </form>
 
-    <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+    <p><a href="view_case_invoices.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
 </body>
 </html>

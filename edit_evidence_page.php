@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Redirect back to the case details page with a success message
-        header("Location: view_case_details.php?case_id={$evidence['case_id']}&success=1");
+        header("Location: view_case_evidence.php?case_id={$evidence['case_id']}&success=1");
         exit();
     } else {
         // Redirect back to the edit evidence page with an error message
@@ -148,6 +148,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <button type="submit">Update</button>
     </form>
 
-    <p><a href="view_case_details.php?case_id=<?php echo $evidence['case_id']; ?>">Back to Case Details</a></p>
+    <p><a href="view_case_evidence.php?case_id=<?php echo $evidence['case_id']; ?>">Back to Case Details</a></p>
 </body>
 </html>

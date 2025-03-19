@@ -160,10 +160,6 @@ if (isset($_POST['update'])) {
                 <td>Address</td>
                 <td><input type="text" name="address" value="<?php echo htmlspecialchars($address); ?>"></td>
             </tr>
-            <tr> 
-                <td>Profile Picture</td>
-                <td><input type="text" name="profile_picture" value="<?php echo htmlspecialchars($profile_picture); ?>"></td>
-            </tr>
             <tr>
                 <td><input type="hidden" name="client_id" value="<?php echo $client_id; ?>"></td>
                 <td><input type="submit" name="update" value="Update"></td>

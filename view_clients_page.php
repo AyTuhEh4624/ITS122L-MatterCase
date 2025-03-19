@@ -57,6 +57,9 @@ foreach ($matters as $matter) {
     }
     $mattersByClient[$clientId][] = $matter['title'];
 }
+
+// Close the database connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -91,7 +94,6 @@ foreach ($matters as $matter) {
         </div>
     </div>
 
-
         <!-- Main Content -->
     <div class="flex-grow flex justify-center mt-4">
             <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] items-center">
@@ -107,7 +109,6 @@ foreach ($matters as $matter) {
                 <th class="border border-gray-500 px-4 py-2">Client Name</th>
                 <th class="border border-gray-500 px-4 py-2">Email</th>
                 <th class="border border-gray-500 px-4 py-2">Address</th>
-                <th class="border border-gray-500 px-4 py-2">Profile Picture</th>
                 <th class="border border-gray-500 px-4 py-2">Created At</th>
                 <th class="border border-gray-500 px-4 py-2">Matters</th>
                 <th class="border border-gray-500 px-4 py-2">Action</th>
@@ -120,7 +121,6 @@ foreach ($matters as $matter) {
                     <td><?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?></td>
                     <td><?php echo htmlspecialchars(decryptData($client['email'], $key, $method)); ?></td>
                     <td><?php echo htmlspecialchars(decryptData($client['address'], $key, $method)); ?></td>
-                    <td><?php echo htmlspecialchars(decryptData($client['profile_picture'], $key, $method)); ?></td>
                     <td><?php echo htmlspecialchars($client['created_at']); ?></td>
                     <td>
                         <?php

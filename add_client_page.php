@@ -144,10 +144,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <td><textarea id="address" name="address" class="w-full text-black" required></textarea></td>
             </tr>
             <tr> 
-                <td>Profile Picture URL</td>
-                <td><input type="text" id="profile_picture" name="profile_picture" class="w-full text-black"></td>
-            </tr>
-            <tr> 
                 <td>Select Matters</td>
                 <td><select id="matter_ids" name="matter_ids[]"  class="w-full text-black" multiple>
             <?php foreach ($matters as $matter): ?>

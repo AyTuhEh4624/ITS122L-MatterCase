@@ -22,44 +22,41 @@ if ($conn->connect_error) {
 if (isset($_GET['matter_id'])) {
     $matter_id = $_GET['matter_id'];
     $query = "
-        SELECT c.case_id, c.case_title, c.court, c.case_type, c.status, c.created_at,
-               cl.client_name, m.title AS matter_title
+        SELECT c.case_id, c.case_title, c.court, c.case_type, c.status, c.created_at
         FROM cases c
-        JOIN clients cl ON c.client_id = cl.client_id
-        JOIN matters m ON c.matter_id = m.matter_id
         WHERE c.matter_id = $matter_id
     ";
 } elseif (isset($_GET['client_id'])) {
     $client_id = $_GET['client_id'];
     $query = "
-        SELECT c.case_id, c.case_title, c.court, c.case_type, c.status, c.created_at,
-               cl.client_name, m.title AS matter_title
+        SELECT c.case_id, c.case_title, c.court, c.case_type, c.status, c.created_at
         FROM cases c
-        JOIN clients cl ON c.client_id = cl.client_id
-        JOIN matters m ON c.matter_id = m.matter_id
         WHERE c.client_id = $client_id
     ";
 } else {
     // Fetch all cases for Admins, Partners, and Lawyers
     $query = "
-        SELECT c.case_id, c.case_title, c.court, c.case_type, c.status, c.created_at,
-               cl.client_name, m.title AS matter_title
+        SELECT c.case_id, c.case_title, c.court, c.case_type, c.status, c.created_at
         FROM cases c
-        JOIN clients cl ON c.client_id = cl.client_id
-        JOIN matters m ON c.matter_id = m.matter_id
     ";
 }
 
 $result = $conn->query($query);
-$data = $result->fetch_all(MYSQLI_ASSOC);
+if (!$result) {
+    die("Database query failed: " . $conn->error);
+}
 
-// Decrypt case data if necessary
-foreach ($data as &$row) {
+// Fetch and display cases individually
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    // Decrypt case data if necessary
     $row['case_title'] = decryptData($row['case_title'], $key, $method);
     $row['court'] = decryptData($row['court'], $key, $method);
-    $row['client_name'] = decryptData($row['client_name'], $key, $method);
-    $row['matter_title'] = decryptData($row['matter_title'], $key, $method);
+    $data[] = $row;
 }
+
+// Close the database connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -121,17 +118,13 @@ foreach ($data as &$row) {
     <table>
         <thead>
             <tr>
-                <?php if (!empty($data)): ?>
-                    <th>Case ID</th>
-                    <th>Case Title</th>
-                    <th>Court</th>
-                    <th>Case Type</th>
-                    <th>Status</th>
-                    <th>Client Name</th>
-                    <th>Matter Title</th>
-                    <th>Created At</th>
-                    <th>Action</th>
-                <?php endif; ?>
+                <th>Case ID</th>
+                <th>Case Title</th>
+                <th>Court</th>
+                <th>Case Type</th>
+                <th>Status</th>
+                <th>Created At</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -142,8 +135,6 @@ foreach ($data as &$row) {
                     <td><?php echo htmlspecialchars($row['court']); ?></td>
                     <td><?php echo htmlspecialchars($row['case_type']); ?></td>
                     <td><?php echo htmlspecialchars($row['status']); ?></td>
-                    <td><?php echo htmlspecialchars($row['client_name']); ?></td>
-                    <td><?php echo htmlspecialchars($row['matter_title']); ?></td>
                     <td><?php echo htmlspecialchars($row['created_at']); ?></td>
                     <td>
                         <!-- View Case Details Link -->

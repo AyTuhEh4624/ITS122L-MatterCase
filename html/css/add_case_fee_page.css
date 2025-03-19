@@ -74,8 +74,8 @@ body{
         font-weight: 500;
       }
 
-    input {
-        width: 50%; 
+    .amount {
+        width: 15%; 
         padding: 12px;
         border: none;
         border-radius: 20px;
@@ -85,6 +85,10 @@ body{
         background-color: rgba(255, 255, 255, 0.8);
         box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
         color: #141414;
+    }
+
+    .amount::placeholder {
+        color: #666;
     }
 
     textarea {
@@ -99,6 +103,7 @@ body{
         letter-spacing: .5px;
         background-color: rgba(255, 255, 255, 0.8);
         box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+        color: #141414;
     }
 
     textarea::placeholder {
@@ -113,39 +118,7 @@ body{
         font-size: 15px; /* optional: slightly smaller */
       }
 
-    .client {
-        width: 50%; 
-        padding: 12px;
-        margin: 5px 0;
-        border: none;
-        border-radius: 20px;
-        font-size: 16px;
-        box-sizing: border-box; 
-        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        letter-spacing: .5px;
-        background-color: rgba(255, 255, 255, 0.8);
-        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-        color: #141414;
-
-    }
-
-    .matter {
-        width: 50%; 
-        padding: 12px;
-        margin: 5px 0;
-        border: none;
-        border-radius: 20px;
-        font-size: 16px;
-        box-sizing: border-box; 
-        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-        letter-spacing: .5px;
-        background-color: rgba(255, 255, 255, 0.8);
-        box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
-        color: #141414;
-
-    }
- /*SELECT*/
-    .status {
+    select {
         width: 25%; 
         padding: 12px;
         margin: 5px 0;

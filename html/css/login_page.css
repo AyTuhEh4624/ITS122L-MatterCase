@@ -1,0 +1,145 @@
+/* General Page Styles */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%; 
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(154deg, #1B1F3B 50%, #6E7F9A 100%);
+    padding: 3vh;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden; 
+    overflow-y: hidden; 
+}
+
+/* Logo */
+img {
+    width: 15vw; 
+    max-width: 120px; 
+    height: auto;
+    margin-bottom: 2vh;
+    margin-top: 2vh;
+}
+
+/* Wrapper for Form + Title */
+.login {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2vh;
+}
+
+/* Headings */
+h1 {
+    color: rgba(255, 255, 255, 0.80);
+    font-size: 1.25rem; 
+    font-weight: 400;
+    margin-bottom: 1vh;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Form */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5vh;
+    align-items: center;
+}
+
+/* Input Fields */
+.input-container {
+    width: 80vw; 
+    max-width: 300px; 
+    min-width: 250px; 
+    height: 40px;
+    background: rgba(236, 250, 253, 0.50);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    margin-bottom: 10px;
+}
+
+input[type="text"],
+input[type="password"] {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: white;
+    font-size: 0.85rem; 
+    caret-color: white;
+}
+
+/* Placeholder */
+::placeholder {
+    color: white;
+    opacity: 0.75;
+    font-size: 0.85rem;
+}
+
+/* Submit Button */
+input[type="submit"] {
+    width: 80vw; 
+    max-width: 300px;
+    min-width: 250px;
+    height: 40px;
+    background: rgba(242, 180, 24, 0.50);
+    border-radius: 20px;
+    color: rgba(255, 255, 255, 0.80);
+    font-size: 0.85rem; 
+    font-weight: 400;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    margin-top: 20px;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background: rgba(242, 180, 24, 0.75);
+}
+
+@media (max-width: 480px) {
+    img {
+        width: 40vw; 
+        max-width: 100px;
+    }
+    
+    h1 {
+        font-size: 1.2rem; 
+    }
+
+    .input-container,
+    input[type="submit"] {
+        width: 90vw;
+        max-width: 250px;
+        height: 35px;
+    }
+
+    input[type="submit"] {
+        font-size: 0.75rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    img {
+        width: 10vw;
+        max-width: 140px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .input-container,
+    input[type="submit"] {
+        width: 60vw;
+        max-width: 320px;
+        height: 45px;
+    }
+}

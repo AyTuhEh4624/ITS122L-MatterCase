@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Client</title>
+    <link rel="stylesheet" href="css/add_client_page.css">
+</head>
+<body>
+    <div class="top-container">
+        <div class="top-nav">
+            <div class="top-left">
+                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
+                <h1>MatterCase</h1>
+            </div> 
+            <a href="logout.php" >Logout</a>
+        </div>
+    </div>
+
+    <!-- Display success or error messages -->
+    <div class="main-container">
+        <h2>Add Case Fee</h2>
+        <div class="status-message">
+            <?php if (isset($_GET['success'])): ?>
+                <p style="color: green;">Client added successfully!</p>
+            <?php elseif (isset($_GET['error'])): ?>
+                <p style="color: red;">Failed to add client. Please try again.</p>
+            <?php endif; ?>
+        </div>
+
+    <!-- Form to Add a New Client -->
+    <div class="form">
+    <form action="add_client_page.php" method="POST">
+        <input type="text" id="client_name" name="client_name" placeholder="Client Name" required><br><br>
+
+        <input type="email" id="email" name="email" placeholder="Email" required><br><br>
+
+        <textarea id="address" name="address" placeholder="Address" required></textarea><br><br>
+
+        <input type="text" id="profile_picture" name="profile_picture" placeholder="Profile Picture URL"><br><br>
+
+        <!-- Multi-select dropdown for matters -->
+        <label for="matter_ids">Select Matters:</label>
+        <select id="matter_ids" name="matter_ids[]" class="matter" multiple>
+            <?php foreach ($matters as $matter): ?>
+                <option value="<?php echo $matter['matter_id']; ?>">
+                    <?php echo htmlspecialchars($matter['title']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select><br><br>
+
+        <button type="submit">Add Client</button>
+    </form>
+    
+        <div class="links">
+            <p><a href="view_clients_page.php">Back to View Clients</a></p>
+        </div>
+    </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Case Update</title>
+    <link rel="stylesheet" href="css/add_case_update_page.css">
+</head>
+<body>
+
+    <div class="top-container">
+        <div class="top-nav">
+            <div class="top-left">
+                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
+                <h1>MatterCase</h1>
+            </div> 
+            <a href="logout.php" >Logout</a>
+        </div>
+    </div>
+
+    <!-- Display success or error messages -->
+    <div class="main-container">
+        <h2>Add Case Update</h2>
+        <div class="status-message">
+            <?php if (isset($_GET['success'])): ?>
+                <p style="color: green;">Case update added successfully!</p>
+            <?php elseif (isset($_GET['error'])): ?>
+                <p style="color: red;">Failed to add case update. Please try again.</p>
+            <?php endif; ?>
+        </div>
+
+        <!-- Form to Add a New Case Update -->
+        <div class="form">
+        <form action="add_case_update_page.php" method="POST">
+            <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+
+            <textarea id="update_text" name="update_text" placeholder="Update Description" required></textarea><br><br>
+
+            <button type="submit">Add Update</button>
+        </form>
+        <div class="links">
+            <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+        </div>
+
+    </div>
+    </div>
+</body>
+</html>

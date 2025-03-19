@@ -63,69 +63,54 @@ foreach ($matters as $matter) {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>View Clients</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>View Clients</h1>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">View <span class="text-green-400">Client</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
+        </div>
+    </div>
 
-    <!-- Back to Dashboard Button -->
-    <p>
-        <a href="<?php
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: // Admin
-                    echo 'dashboard_admin.php';
-                    break;
-                case 1: // Partner
-                    echo 'dashboard_partner.php';
-                    break;
-                case 2: // Lawyer
-                    echo 'dashboard_lawyer.php';
-                    break;
-                case 3: // Paralegal
-                    echo 'dashboard_paralegal.php';
-                    break;
-                case 4: // Messenger
-                    echo 'dashboard_messenger.php';
-                    break;
-                default:
-                    echo 'login_page.php'; // Fallback to login page
-                    break;
-            }
-        ?>">Back to Dashboard</a>
-    </p>
 
-    <!-- Link to Add Clients Page (Only for Admins and Partners) -->
-    <?php if ($usertype == 0 || $usertype == 1): ?>
-        <p><a href="add_client_page.php">Add New Client</a></p>
+        <!-- Main Content -->
+    <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] items-center">
+            <?php if ($usertype == 0 || $usertype == 1): ?>
+        <a href="add_client_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mb-6">Add New Client</button></a>
     <?php endif; ?>
 
-    <!-- Display Existing Clients -->
-    <h2>Existing Clients</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Client ID</th>
-                <th>Client Name</th>
-                <th>Email</th>
-                <th>Address</th>
-                <th>Profile Picture</th>
-                <th>Created At</th>
-                <th>Matters</th>
-                <th>Action</th>
+        <div class="overflow-x-auto mt-4">
+            <table class="mx-auto w-[100%] border-collapse border border-gray-500">
+            <thead>
+            <tr class="bg-gray-800 text-white">
+                <th class="border border-gray-500 px-4 py-2">Client ID</th>
+                <th class="border border-gray-500 px-4 py-2">Client Name</th>
+                <th class="border border-gray-500 px-4 py-2">Email</th>
+                <th class="border border-gray-500 px-4 py-2">Address</th>
+                <th class="border border-gray-500 px-4 py-2">Profile Picture</th>
+                <th class="border border-gray-500 px-4 py-2">Created At</th>
+                <th class="border border-gray-500 px-4 py-2">Matters</th>
+                <th class="border border-gray-500 px-4 py-2">Action</th>
             </tr>
         </thead>
         <tbody>
@@ -160,5 +145,8 @@ foreach ($matters as $matter) {
             <?php endforeach; ?>
         </tbody>
     </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

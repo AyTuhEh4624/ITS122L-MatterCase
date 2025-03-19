@@ -59,75 +59,69 @@ foreach ($data as &$row) {
 <body class="bg-gray-900 text-white">
     <div class="min-h-screen flex flex-col">
         <!-- Top Bar -->
-        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex justify-between items-center">
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
             <span class="text-lg">Client <span class="text-green-400">Matters</span></span>
-            <a href="logout.php"><button class="text-gray-300">Logout</button></a>
-            <a href="<?php
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: // Admin
-                    echo 'dashboard_admin.php';
-                    break;
-                case 1: // Partner
-                    echo 'dashboard_partner.php';
-                    break;
-                case 2: // Lawyer
-                    echo 'dashboard_lawyer.php';
-                    break;
-                case 3: // Paralegal
-                    echo 'dashboard_paralegal.php';
-                    break;
-                case 4: // Messenger
-                    echo 'dashboard_messenger.php';
-                    break;
-                default:
-                    echo 'login_page.php'; // Fallback to login page
-                    break;
-            }
-        ?>"><button class="text-gray-300">Dashboard</button></a>
-        </div>
-
-        <!-- Main Content -->
-        <div class="flex-grow flex justify-center mt-2">
-            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
-            <?php if ($usertype == 0 || $usertype == 1): ?>
-        <a href="add_matter_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Matter</button></a>
-    <?php endif; ?>
-            <table width="90%">
-        <thead>
-            <tr>
-                <?php if (!empty($data)): ?>
-                    <?php foreach ($data[0] as $key => $value): ?>
-                        <th><?php echo htmlspecialchars($key); ?></th>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-                <th>Edit Matter</th>
-                <th>View Cases</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($data as $row): ?>
-                <tr>
-                    <?php foreach ($row as $key => $value): ?>
-                        <td>
-                            <?php 
-                            // Display decrypted title and description
-                            echo htmlspecialchars($value);
-                            ?>
-                        </td>
-                    <?php endforeach; ?>
-                    <td>
-                        <a href="edit_matter_page.php?matter_id=<?php echo $row['matter_id']; ?>">Edit</a>
-                    </td>
-                    <td>
-                        <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>">View Cases</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
-            </div>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
         </div>
     </div>
+
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+        <?php if ($usertype == 0 || $usertype == 1): ?>
+            <a href="add_matter_page.php">
+                <button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Matter</button>
+            </a>
+        <?php endif; ?>
+
+        <div class="overflow-x-auto mt-4">
+            <table class="mx-auto w-[100%] border-collapse border border-gray-500">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                        <?php if (!empty($data)): ?>
+                            <?php foreach ($data[0] as $key => $value): ?>
+                                <th class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($key); ?></th>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                        <th class="border border-gray-500 px-4 py-2">Edit Matter</th>
+                        <th class="border border-gray-500 px-4 py-2">View Cases</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($data as $row): ?>
+                        <tr class="bg-gray-700 text-gray-300">
+                            <?php foreach ($row as $key => $value): ?>
+                                <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($value); ?></td>
+                            <?php endforeach; ?>
+                            <td class="border border-gray-500 px-4 py-2">
+                                <a href="edit_matter_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-blue-400">Edit</a>
+                            </td>
+                            <td class="border border-gray-500 px-4 py-2">
+                                <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-green-400">View Cases</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>

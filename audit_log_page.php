@@ -44,47 +44,65 @@ if (!$result) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audit Log</title>
-    <script>
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com">
         function Delete(id) {
                 document.getElementById('deleteForm' + id).submit();
         }
     </script>
 </head>
-<body>
-    <h1>Audit Log</h1>
-    <a href="dashboard_admin.php">Back to Dashboard</a>
-    <br><br>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Audit <span class="text-green-400">Log</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="dashboard_admin.php">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
+        </div>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>Action</th>
-                <th>Timestamp</th>
-                <th>Delete</th>
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+        <div class="overflow-x-auto">
+            <table class="mx-auto w-[100%] border-collapse border border-gray-500">
+                <thead>
+                    <tr class="bg-gray-800 text-white">
+                    <th class="border border-gray-500 px-4 py-2">ID</th>
+                <th class="border border-gray-500 px-4 py-2">User ID</th>
+                <th class="border border-gray-500 px-4 py-2">Username</th>
+                <th class="border border-gray-500 px-4 py-2">Action</th>
+                <th class="border border-gray-500 px-4 py-2">Timestamp</th>
+                <th class="border border-gray-500 px-4 py-2">Delete</th>
             </tr>
         </thead>
         <tbody>
             <?php while ($row = mysqli_fetch_assoc($result)): ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['id']); ?></td>
-                    <td><?php echo htmlspecialchars($row['user_id']); ?></td>
-                    <td><?php echo htmlspecialchars($row['username'] ?? 'N/A'); ?></td>
-                    <td><?php echo htmlspecialchars(decryptData($row['action'], $key, $method)); ?></td>
-                    <td><?php echo htmlspecialchars($row['timestamp']); ?></td>
-                    <td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['id']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['user_id']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['username'] ?? 'N/A'); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars(decryptData($row['action'], $key, $method)); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['timestamp']); ?></td>
+                    <td  class="border border-gray-500 px-4 py-2">
                         <form id="deleteForm<?php echo $row['id']; ?>" method="post">
                             <input type="hidden" name="delete_id" value="<?php echo $row['id']; ?>">
-                            <button type="button" onclick="Delete(<?php echo $row['id']; ?>)">Delete</button>
+                            <button type="button" onclick="Delete(<?php echo $row['id']; ?>)" class="text-red-400">Delete</button>
                         </form>
                     </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
     </table>
+        </div>
+    </div>
+</div>
+
+
 </body>
 </html>
 

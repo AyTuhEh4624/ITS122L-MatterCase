@@ -88,59 +88,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Client</title>
-    <link rel="stylesheet" href="css/add_client_page.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="top-container">
-        <div class="top-nav">
-            <div class="top-left">
-                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
-                <h1>MatterCase</h1>
-            </div> 
-            <a href="logout.php" >Logout</a>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Add <span class="text-green-400">Client</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
         </div>
     </div>
 
-    <!-- Display success or error messages -->
-    <div class="main-container">
-        <h2>Add Case Fee</h2>
-        <div class="status-message">
-            <?php if (isset($_GET['success'])): ?>
-                <p style="color: green;">Client added successfully!</p>
-            <?php elseif (isset($_GET['error'])): ?>
-                <p style="color: red;">Failed to add client. Please try again.</p>
-            <?php endif; ?>
-        </div>
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
 
-    <!-- Form to Add a New Client -->
-    <div class="form">
+    <div class="flex justify-center items-center mt-4">
+
+    <?php if (isset($_GET['success'])): ?>
+        <p style="color: green;">Client added successfully!</p>
+    <?php elseif (isset($_GET['error'])): ?>
+        <p style="color: red;">Failed to add client. Please try again.</p>
+    <?php endif; ?>
+        
+    <!-- Form to Add a New Case Update -->
     <form action="add_client_page.php" method="POST">
-        <input type="text" id="client_name" name="client_name" placeholder="Client Name" required><br><br>
-
-        <input type="email" id="email" name="email" placeholder="Email" required><br><br>
-
-        <textarea id="address" name="address" placeholder="Address" required></textarea><br><br>
-
-        <input type="text" id="profile_picture" name="profile_picture" placeholder="Profile Picture URL"><br><br>
-
-        <!-- Multi-select dropdown for matters -->
-        <label for="matter_ids">Select Matters:</label>
-        <select id="matter_ids" name="matter_ids[]" class="matter" multiple>
+        <table border="0" class="mx-auto text-left">
+            <tr> 
+                <td>Client Name</td>
+                <td><input type="text" id="client_name" name="client_name" class="w-full text-black" required></td>
+            </tr>
+            <tr> 
+                <td>Email</td>
+                <td><input type="email" id="email" name="email" class="w-full text-black" required></td>
+            </tr>
+            <tr> 
+                <td>Address</td>
+                <td><textarea id="address" name="address" class="w-full text-black" required></textarea></td>
+            </tr>
+            <tr> 
+                <td>Profile Picture URL</td>
+                <td><input type="text" id="profile_picture" name="profile_picture" class="w-full text-black"></td>
+            </tr>
+            <tr> 
+                <td>Select Matters</td>
+                <td><select id="matter_ids" name="matter_ids[]"  class="w-full text-black" multiple>
             <?php foreach ($matters as $matter): ?>
                 <option value="<?php echo $matter['matter_id']; ?>">
                     <?php echo htmlspecialchars($matter['title']); ?>
                 </option>
             <?php endforeach; ?>
-        </select><br><br>
-
-        <button type="submit">Add Client</button>
+        </select></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Client</button></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to View Clients</button></a></td>
+            </tr>
+        </table>
     </form>
-    
-        <div class="links">
-            <p><a href="view_clients_page.php">Back to View Clients</a></p>
         </div>
     </div>
-    </div>
+</div>
 </body>
 </html>

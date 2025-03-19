@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Redirect back to the case details page with a success message
-        header("Location: view_case_details.php?case_id=$case_id&success=1");
+        header("Location: view_case_fees.php?case_id=$case_id&success=1");
         exit();
     } else {
         // Redirect back to the add case fee page with an error message
@@ -57,56 +57,72 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Case Fee</title>
-    <link rel="stylesheet" href="css/add_case_fee_page.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="top-container">
-        <div class="top-nav">
-            <div class="top-left">
-                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
-                <h1>MatterCase</h1>
-            </div> 
-            <a href="logout.php" >Logout</a>
-        </div>
-    </div>
-
-
-    <!-- Display success or error messages -->
-    <div class="main-container">
-        <h2>Add Case Fee</h2>
-        <div class="status-message">
-            <?php if (isset($_GET['success'])): ?>
-                <p style="color: green;">Case fee added successfully!</p>
-            <?php elseif (isset($_GET['error'])): ?>
-                <p style="color: red;">Failed to add case fee. Please try again.</p>
-            <?php endif; ?>
-        </div>
-
-        <div class="form">
-            <form action="add_case_fee_page.php" method="POST">
-            <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
-
-            <input type="number" id="amount" class="amount" name="amount" placeholder="Amount" step="0.01" required><br><br>
-
-            <textarea id="fee_description" name="fee_description" placeholder="Description" required></textarea><br><br>
-
-            <label for="payment_status">Payment Status:</label>
-            <select id="payment_status" name="payment_status" required>
-                <option value="Unpaid">Unpaid</option>
-                <option value="Paid">Paid</option>
-                <option value="Overdue">Overdue</option>
-            </select><br><br>
-
-            <label for="due_date">Due Date:</label>
-            <input type="date" id="due_date" class="date" name="due_date" required><br><br>
-        </div>
-        <button type="submit">Add Fee</button>
-    </form>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Add <span class="text-green-400">Case Fee</span></span>
     
-        <div class="links">
-            <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
         </div>
     </div>
+
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+
+    <div class="flex justify-center items-center mt-4">
+    <form action="add_case_fee_page.php" method="POST">
+        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+        <table border="0" class="mx-auto text-left">
+            <tr> 
+                <td>Amount</td>
+                <td><input type="number" id="amount" name="amount" class="text-black" step="0.01" required></td>
+            </tr>
+            <tr> 
+                <td>Description</td>
+                <td><textarea id="fee_description" name="fee_description" class="w-full text-black" required></textarea></td>
+            </tr>
+            <tr> 
+                <td>Payment Status</td>
+                <td><select id="payment_status" name="payment_status" class="w-full text-black" required>
+            <option value="Unpaid">Unpaid</option>
+            <option value="Paid">Paid</option>
+            <option value="Overdue">Overdue</option>
+        </select></td>
+            </tr>
+            <tr> 
+                <td>Due Date</td>
+                <td><input type="date" id="due_date" name="due_date" class="w-full text-black" required></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Fee</button></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to Case Details</button></a></td>
+            </tr>
+        </table>
+    </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>

@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($stmt->execute()) {
         // Redirect back to the case details page with a success message
-        header("Location: view_case_details.php?case_id=$case_id&success=1");
+        header("Location: view_case_updates.php?case_id=$case_id&success=1");
         exit();
     } else {
         // Redirect back to the add case update page with an error message
@@ -67,46 +67,64 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Case Update</title>
-    <link rel="stylesheet" href="css/add_case_update_page.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-
-    <div class="top-container">
-        <div class="top-nav">
-            <div class="top-left">
-                <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
-                <h1>MatterCase</h1>
-            </div> 
-            <a href="logout.php" >Logout</a>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Add <span class="text-green-400">Case</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
         </div>
     </div>
 
-    <!-- Display success or error messages -->
-    <div class="main-container">
-        <h2>Add Case Update</h2>
-        <div class="status-message">
-            <?php if (isset($_GET['success'])): ?>
-                <p style="color: green;">Case update added successfully!</p>
-            <?php elseif (isset($_GET['error'])): ?>
-                <p style="color: red;">Failed to add case update. Please try again.</p>
-            <?php endif; ?>
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+
+    <div class="flex justify-center items-center mt-4">
+
+    <?php if (isset($_GET['success'])): ?>
+        <p style="color: green;">Case update added successfully!</p>
+    <?php elseif (isset($_GET['error'])): ?>
+        <p style="color: red;">Failed to add case update. Please try again.</p>
+    <?php endif; ?>
+
+    <!-- Form to Add a New Case Update -->
+    <form action="add_case_update_page.php" method="POST">
+        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+        <table border="0" class="mx-auto text-left">
+            <tr> 
+                <td>Update Text</td>
+                <td><textarea id="update_text" name="update_text" class="w-full text-black" required></textarea></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Update</button></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to Case Details</button></a></td>
+            </tr>
+        </table>
+    </form>
         </div>
-
-        <!-- Form to Add a New Case Update -->
-        <div class="form">
-        <form action="add_case_update_page.php" method="POST">
-            <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
-
-            <textarea id="update_text" name="update_text" placeholder="Update Description" required></textarea><br><br>
-
-            <button type="submit">Add Update</button>
-        </form>
-        <div class="links">
-            <p><a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
-        </div>
-
     </div>
-    </div>
+</div>
 </body>
 </html>

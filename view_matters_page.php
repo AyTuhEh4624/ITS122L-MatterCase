@@ -39,13 +39,21 @@ if ($usertype == 0 || $usertype == 1) {
 }
 
 $result = $conn->query($query);
-$data = $result->fetch_all(MYSQLI_ASSOC);
+if (!$result) {
+    die("Database query failed: " . $conn->error);
+}
 
-// Decrypt the title and description fields
-foreach ($data as &$row) {
+// Fetch and display matters individually
+$data = [];
+while ($row = $result->fetch_assoc()) {
+    // Decrypt the title and description fields
     $row['title'] = decryptData($row['title'], $key, $method);
     $row['description'] = decryptData($row['description'], $key, $method);
+    $data[] = $row;
 }
+
+// Close the database connection
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -80,48 +88,47 @@ foreach ($data as &$row) {
         </div>
     </div>
 
-<!-- Main Content -->
-<div class="flex-grow flex justify-center mt-4">
-    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
-        <?php if ($usertype == 0 || $usertype == 1): ?>
-            <a href="add_matter_page.php">
-                <button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Matter</button>
-            </a>
-        <?php endif; ?>
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+                <?php if ($usertype == 0 || $usertype == 1): ?>
+                    <a href="add_matter_page.php">
+                        <button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Matter</button>
+                    </a>
+                <?php endif; ?>
 
-        <div class="overflow-x-auto mt-4">
-            <table class="mx-auto w-[100%] border-collapse border border-gray-500">
-                <thead>
-                    <tr class="bg-gray-800 text-white">
-                        <?php if (!empty($data)): ?>
-                            <?php foreach ($data[0] as $key => $value): ?>
-                                <th class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($key); ?></th>
+                <div class="overflow-x-auto mt-4">
+                    <table class="mx-auto w-[100%] border-collapse border border-gray-500">
+                        <thead>
+                            <tr class="bg-gray-800 text-white">
+                                <th class="border border-gray-500 px-4 py-2">Matter ID</th>
+                                <th class="border border-gray-500 px-4 py-2">Title</th>
+                                <th class="border border-gray-500 px-4 py-2">Description</th>
+                                <th class="border border-gray-500 px-4 py-2">Created At</th>
+                                <th class="border border-gray-500 px-4 py-2">Edit Matter</th>
+                                <th class="border border-gray-500 px-4 py-2">View Cases</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data as $row): ?>
+                                <tr class="bg-gray-700 text-gray-300">
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['matter_id']); ?></td>
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['title']); ?></td>
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['description']); ?></td>
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['created_at']); ?></td>
+                                    <td class="border border-gray-500 px-4 py-2">
+                                        <a href="edit_matter_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-blue-400">Edit</a>
+                                    </td>
+                                    <td class="border border-gray-500 px-4 py-2">
+                                        <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-green-400">View Cases</a>
+                                    </td>
+                                </tr>
                             <?php endforeach; ?>
-                        <?php endif; ?>
-                        <th class="border border-gray-500 px-4 py-2">Edit Matter</th>
-                        <th class="border border-gray-500 px-4 py-2">View Cases</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($data as $row): ?>
-                        <tr class="bg-gray-700 text-gray-300">
-                            <?php foreach ($row as $key => $value): ?>
-                                <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($value); ?></td>
-                            <?php endforeach; ?>
-                            <td class="border border-gray-500 px-4 py-2">
-                                <a href="edit_matter_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-blue-400">Edit</a>
-                            </td>
-                            <td class="border border-gray-500 px-4 py-2">
-                                <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-green-400">View Cases</a>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-
 </body>
 </html>

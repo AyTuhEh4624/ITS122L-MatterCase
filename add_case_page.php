@@ -65,57 +65,99 @@ $matters = $conn->query("SELECT matter_id, title FROM matters");
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Case</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Add New Case</h1>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Add <span class="text-green-400">Case</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
+        </div>
+    </div>
 
-    <!-- Display success or error messages -->
+<!-- Main Content -->
+<div class="flex-grow flex justify-center mt-4">
+    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+
+    <div class="flex justify-center items-center mt-4">
+
     <?php if (isset($_GET['success'])): ?>
         <p style="color: green;">Case added successfully!</p>
     <?php elseif (isset($_GET['error'])): ?>
         <p style="color: red;">Failed to add case. Please try again.</p>
     <?php endif; ?>
 
-    <!-- Form to Add a New Case -->
     <form action="add_case_page.php" method="POST">
-        <label for="case_title">Case Title:</label>
-        <input type="text" id="case_title" name="case_title" required><br><br>
-
-        <label for="court">Court:</label>
-        <input type="text" id="court" name="court" required><br><br>
-
-        <label for="case_type">Case Type:</label>
-        <input type="text" id="case_type" name="case_type" required><br><br>
-
-        <label for="status">Status:</label>
-        <select id="status" name="status" required>
+        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+        <table border="0" class="mx-auto text-left">
+            <tr> 
+                <td>Case Title</td>
+                <td><input type="text" id="case_title" name="case_title" class="w-full text-black" required></td>
+            </tr>
+            <tr> 
+                <td>Court</td>
+                <td><input type="text" id="court" name="court" class="w-full text-black" required></td>
+            </tr>
+            <tr> 
+                <td>Case Type</td>
+                <td><input type="text" id="case_type" name="case_type" class="w-full text-black" required></td>
+            </tr>
+            <tr> 
+                <td>Status</td>
+                <td><select id="status" name="status" class="w-full text-black" required>
             <option value="Active">Active</option>
             <option value="Dismissed">Dismissed</option>
             <option value="Closed">Closed</option>
-        </select><br><br>
-
-        <label for="client_id">Client:</label>
-        <select id="client_id" name="client_id" required>
+        </select></td>
+            </tr>
+            <tr> 
+                <td>Client</td>
+                <td><select id="client_id" name="client_id" class="w-full text-black" required>
             <?php while ($client = $clients->fetch_assoc()): ?>
                 <option value="<?php echo $client['client_id']; ?>">
                     <?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?>
                 </option>
             <?php endwhile; ?>
-        </select><br><br>
-
-        <label for="matter_id">Matter:</label>
-        <select id="matter_id" name="matter_id" required>
+        </select></td>
+            </tr>
+            <tr> 
+                <td>Matter</td>
+                <td><select id="matter_id" name="matter_id" class="w-full text-black" required>
             <?php while ($matter = $matters->fetch_assoc()): ?>
                 <option value="<?php echo $matter['matter_id']; ?>">
                     <?php echo htmlspecialchars(decryptData($matter['title'], $key, $method)); ?>
                 </option>
             <?php endwhile; ?>
-        </select><br><br>
-
-        <button type="submit">Add Case</button>
+        </select></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Fee</button></td>
+            </tr>
+            <tr> 
+                <td colspan="2"><a href="view_cases_page.php"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to View Cases</button></a></td>
+            </tr>
+        </table>
     </form>
-
-    <p><a href="view_cases_page.php">Back to View Cases</a></p>
+        </div>
+    </div>
+</div>
 </body>
 </html>

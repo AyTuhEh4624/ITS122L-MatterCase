@@ -1,6 +1,5 @@
 <?php
 session_start();
-include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/config.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/decrypt.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/encryption.php");
 include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/audit_log.php");
@@ -16,7 +15,7 @@ $usertype = $_SESSION['usertype'];
 
 // Restrict access to Admins and Partners only
 if ($usertype != 0 && $usertype != 1) {
-    header('Location: view_cases_page.php');
+    header('Location: view_clients_page.php');
     exit();
 }
 
@@ -52,70 +51,48 @@ $email = decryptData($client_data['email'], $key, $method);
 $address = decryptData($client_data['address'], $key, $method);
 $profile_picture = decryptData($client_data['profile_picture'], $key, $method);
 
-// Handle form submission
-if (isset($_POST['update'])) {
-    $new_client_name = $_POST['client_name'];
-    $new_email = $_POST['email'];
-    $new_address = $_POST['address'];
-    $new_profile_picture = $_POST['profile_picture'];
+// Fetch related matters
+$matters_query = "SELECT cm.matter_id, m.title FROM client_matters cm JOIN matters m ON cm.matter_id = m.matter_id WHERE cm.client_id = ?";
+$stmt = $conn->prepare($matters_query);
+$stmt->bind_param("i", $client_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$matters = $result->fetch_all(MYSQLI_ASSOC);
 
-    // Check if the new email is unique (if it has changed)
-    if ($new_email !== $email && !isEmailUnique($conn, $new_email, $key, $method)) {
-        echo "Error: Email already exists. Please use a different email address.";
+foreach ($matters as &$matter) {
+    $matter['title'] = decryptData($matter['title'], $key, $method);
+}
+
+// Handle removal of related matters
+if (isset($_POST['remove_matter'])) {
+    $matter_id_to_remove = $_POST['remove_matter_id'];
+    $delete_stmt = $conn->prepare("DELETE FROM client_matters WHERE client_id = ? AND matter_id = ?");
+    $delete_stmt->bind_param("ii", $client_id, $matter_id_to_remove);
+    if ($delete_stmt->execute()) {
+        echo "Matter removed successfully.";
+        header("Refresh:0"); // Refresh the page to reflect changes
     } else {
-        // Compare old and new data to log changes
-        $changes = [];
-        if ($new_client_name !== $client_name) {
-            $changes[] = "Client Name: '$client_name' to '$new_client_name'";
-        }
-        if ($new_email !== $email) {
-            $changes[] = "Email: '$email' to '$new_email'";
-        }
-        if ($new_address !== $address) {
-            $changes[] = "Address: '$address' to '$new_address'";
-        }
-        if ($new_profile_picture !== $profile_picture) {
-            $changes[] = "Profile Picture: Updated";
-        }
-
-        // Log changes if any
-        if (!empty($changes)) {
-            $action = "Updated client ID $client_id: " . implode(", ", $changes);
-            logAction($conn, $user_id, $action, $key, $method);
-        }
-
-        // Encrypt new data
-        $encrypted_client_name = encryptData($new_client_name, $key, $method);
-        $encrypted_email = encryptData($new_email, $key, $method);
-        $encrypted_address = encryptData($new_address, $key, $method);
-        $encrypted_profile_picture = encryptData($new_profile_picture, $key, $method);
-
-        // Update the client data in the database
-        $update_query = "
-            UPDATE clients 
-            SET client_name = ?, 
-                email = ?, 
-                address = ?, 
-                profile_picture = ? 
-            WHERE client_id = ?
-        ";
-        $stmt = $conn->prepare($update_query);
-        $stmt->bind_param(
-            "ssssi",
-            $encrypted_client_name,
-            $encrypted_email,
-            $encrypted_address,
-            $encrypted_profile_picture,
-            $client_id
-        );
-
-        if ($stmt->execute()) {
-            echo "Client updated successfully.";
-        } else {
-            echo "Error updating client.";
-        }
+        echo "Error removing matter.";
     }
 }
+
+// Handle adding of related matters
+if (isset($_POST['add_matter'])) {
+    $new_matter_id = $_POST['new_matter_id'];
+    $insert_stmt = $conn->prepare("INSERT INTO client_matters (client_id, matter_id) VALUES (?, ?)");
+    $insert_stmt->bind_param("ii", $client_id, $new_matter_id);
+    if ($insert_stmt->execute()) {
+        echo "Matter added successfully.";
+        header("Refresh:0"); // Refresh the page to reflect changes
+    } else {
+        echo "Error adding matter.";
+    }
+}
+
+// Fetch available matters for selection
+$available_matters_query = "SELECT matter_id, title FROM matters";
+$available_matters_result = $conn->query($available_matters_query);
+$available_matters = $available_matters_result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -127,25 +104,6 @@ if (isset($_POST['update'])) {
 <body>
     <h1>Edit Client</h1>
 
-    <!-- Back to Dashboard Button -->
-    <p>
-        <a href="<?php
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: // Admin
-                    echo 'dashboard_admin.php';
-                    break;
-                case 1: // Partner
-                    echo 'dashboard_partner.php';
-                    break;
-                default:
-                    echo 'login_page.php'; // Fallback to login page
-                    break;
-            }
-        ?>">Back to Dashboard</a>
-    </p>
-
-    <!-- Edit Client Form -->
     <form name="update_client" method="post" action="edit_client_page.php?client_id=<?php echo $client_id; ?>">
         <table border="0">
             <tr> 
@@ -160,11 +118,45 @@ if (isset($_POST['update'])) {
                 <td>Address</td>
                 <td><input type="text" name="address" value="<?php echo htmlspecialchars($address); ?>"></td>
             </tr>
-            <tr>
-                <td><input type="hidden" name="client_id" value="<?php echo $client_id; ?>"></td>
-                <td><input type="submit" name="update" value="Update"></td>
-            </tr>
         </table>
     </form>
+
+    <h2>Related Matters</h2>
+    <table border="1">
+        <tr>
+            <th>Matter Title</th>
+            <th>Action</th>
+        </tr>
+        <?php foreach ($matters as $matter): ?>
+        <tr>
+            <td><?php echo htmlspecialchars($matter['title']); ?></td>
+            <td>
+                <form method="post" action="">
+                    <input type="hidden" name="remove_matter_id" value="<?php echo $matter['matter_id']; ?>">
+                    <input type="submit" name="remove_matter" value="Remove">
+                </form>
+            </td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
+
+    <h2>Add Matter</h2>
+    <form method="post" action="">
+        <select name="new_matter_id">
+            <?php foreach ($available_matters as $available_matter): ?>
+                <option value="<?php echo $available_matter['matter_id']; ?>">
+                    <?php echo htmlspecialchars(decryptData($available_matter['title'], $key, $method)); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <input type="submit" name="add_matter" value="Add Matter">
+    </form>
+
+    <div class="mb-4">
+        <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Update Client</button>
+    </div>
+    <div>
+        <a href="view_clients_page.php"><button type="button" class="bg-gray-700 text-white font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to View Clients</button></a>
+    </div>
 </body>
 </html>

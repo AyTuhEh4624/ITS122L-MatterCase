@@ -91,7 +91,9 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
                     <label for="payment_status" class="block mt-4 mb-2 font-semibold">Payment Status:</label>
                     <select id="payment_status" name="payment_status" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
                         <option value="Unpaid">Unpaid</option>
+                        <?php if ($usertype == 0 || $usertype == 1): ?>
                         <option value="Paid">Paid</option>
+                        <?php endif; ?>
                         <option value="Overdue">Overdue</option>
                     </select>
                     

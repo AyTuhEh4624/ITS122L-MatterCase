@@ -74,22 +74,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- Form to Edit a Case Fee -->
     <form action="edit_case_fee_page.php?fee_id=<?php echo $fee_id; ?>" method="POST">
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 3): ?>
         <label for="amount">Amount:</label>
         <input type="number" id="amount" name="amount" step="0.01" value="<?php echo htmlspecialchars($fee['amount']); ?>" required><br><br>
 
         <label for="fee_description">Description:</label>
         <textarea id="fee_description" name="fee_description" required><?php echo htmlspecialchars($fee['fee_description']); ?></textarea><br><br>
-
+        <?php endif; ?>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 4): ?>
         <label for="payment_status">Payment Status:</label>
         <select id="payment_status" name="payment_status" required>
             <option value="Unpaid" <?php echo $fee['payment_status'] == 'Unpaid' ? 'selected' : ''; ?>>Unpaid</option>
             <option value="Paid" <?php echo $fee['payment_status'] == 'Paid' ? 'selected' : ''; ?>>Paid</option>
             <option value="Overdue" <?php echo $fee['payment_status'] == 'Overdue' ? 'selected' : ''; ?>>Overdue</option>
         </select><br><br>
-
+        <?php endif; ?>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 3): ?>
         <label for="due_date">Due Date:</label>
         <input type="date" id="due_date" name="due_date" value="<?php echo htmlspecialchars($fee['due_date']); ?>" required><br><br>
-
+        <?php endif; ?>
         <button type="submit">Update</button>
     </form>
 

@@ -28,9 +28,11 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/view_cas
                 <h2 class="text-xl font-semibold">Case: <?php echo htmlspecialchars($case['case_title']); ?></h2>
                 
                 <div class="mt-4">
+                <?php if ($usertype == 0 || $usertype == 1 || $usertype == 3): ?>
                     <a href="add_case_fee_page.php?case_id=<?php echo $case_id; ?>">
                         <button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Fee</button>
                     </a>
+                <? endif; ?>
                 </div>
 
                 <div class="overflow-x-auto mt-4">

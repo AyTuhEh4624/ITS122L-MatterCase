@@ -63,90 +63,80 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Cases</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>View Cases</h1>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">View <span class="text-green-400">Cases</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                // Redirect to the appropriate dashboard based on usertype
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+            </a>
+        </div>
+    </div>
 
-    <!-- Add New Case Button (Only for Admins and Partners) -->
-    <?php if ($usertype == 0 || $usertype == 1): ?>
-        <p><a href="add_case_page.php">Add New Case</a></p>
-    <?php endif; ?>
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
+                <?php if ($usertype == 0 || $usertype == 1): ?>
+                    <a href="add_case_page.php">
+                        <button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add New Case</button>
+                    </a>
+                <?php endif; ?>
 
-    <!-- Back to Dashboard Button -->
-    <p>
-        <a href="<?php
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: // Admin
-                    echo 'dashboard_admin.php';
-                    break;
-                case 1: // Partner
-                    echo 'dashboard_partner.php';
-                    break;
-                case 2: // Lawyer
-                    echo 'dashboard_lawyer.php';
-                    break;
-                case 3: // Paralegal
-                    echo 'dashboard_paralegal.php';
-                    break;
-                case 4: // Messenger
-                    echo 'dashboard_messenger.php';
-                    break;
-                default:
-                    echo 'login_page.php'; // Fallback to login page
-                    break;
-            }
-        ?>">Back to Dashboard</a>
-    </p>
-
-    <!-- Display Existing Cases -->
-    <h2>Existing Cases</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Case ID</th>
-                <th>Case Title</th>
-                <th>Court</th>
-                <th>Case Type</th>
-                <th>Status</th>
-                <th>Created At</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($data as $row): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($row['case_id']); ?></td>
-                    <td><?php echo htmlspecialchars($row['case_title']); ?></td>
-                    <td><?php echo htmlspecialchars($row['court']); ?></td>
-                    <td><?php echo htmlspecialchars($row['case_type']); ?></td>
-                    <td><?php echo htmlspecialchars($row['status']); ?></td>
-                    <td><?php echo htmlspecialchars($row['created_at']); ?></td>
-                    <td>
+                <div class="overflow-x-auto mt-4">
+                    <table class="mx-auto w-[100%] border-collapse border border-gray-500">
+                        <thead>
+                            <tr class="bg-gray-800 text-white">
+                                <th class="border border-gray-500 px-4 py-2">Case ID</th>
+                                <th class="border border-gray-500 px-4 py-2">Case Title</th>
+                                <th class="border border-gray-500 px-4 py-2">Court</th>
+                                <th class="border border-gray-500 px-4 py-2">Case Type</th>
+                                <th class="border border-gray-500 px-4 py-2">Status</th>
+                                <th class="border border-gray-500 px-4 py-2">Created At</th>
+                                <th class="border border-gray-500 px-4 py-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data as $row): ?>
+                                <tr class="bg-gray-700 text-gray-300">
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['case_id']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['case_title']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['court']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['case_type']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['status']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['created_at']); ?></td>
+                    <td class="border border-gray-500 px-4 py-2">
                         <!-- View Case Details Link -->
-                        <a href="view_case_details.php?case_id=<?php echo $row['case_id']; ?>">View Details</a>
+                        <a href="view_case_details.php?case_id=<?php echo $row['case_id']; ?>" class="text-blue-400">View Details</a>
                         <!-- Edit Case Link (Only for Admins and Partners) -->
                         <?php if ($usertype == 0 || $usertype == 1): ?>
-                            | <a href="edit_case_page.php?case_id=<?php echo $row['case_id']; ?>">Edit</a>
+                            | <a href="edit_case_page.php?case_id=<?php echo $row['case_id']; ?>" class="text-blue-400">Edit</a>
                         <?php endif; ?>
                     </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

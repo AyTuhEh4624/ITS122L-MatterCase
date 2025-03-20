@@ -135,10 +135,10 @@ $conn->close();
                     </td>
                     <td>
                         <!-- View Client Details Link -->
-                        <a href="view_cases_page.php?client_id=<?php echo $client['client_id']; ?>">View Details</a>
+                        <a href="view_cases_page.php?client_id=<?php echo $client['client_id']; ?>" class="text-blue-400">View Details</a>
                         <!-- Edit Client Link (Only for Admins and Partners) -->
                         <?php if ($usertype == 0 || $usertype == 1): ?>
-                            | <a href="edit_client_page.php?client_id=<?php echo $client['client_id']; ?>">Edit</a>
+                            | <a href="edit_client_page.php?client_id=<?php echo $client['client_id']; ?>" class="text-green-400">Edit</a>
                         <?php endif; ?>
                     </td>
                 </tr>

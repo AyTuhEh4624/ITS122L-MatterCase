@@ -52,6 +52,23 @@ while ($row = $result->fetch_assoc()) {
     // Decrypt case data if necessary
     $row['case_title'] = decryptData($row['case_title'], $key, $method);
     $row['court'] = decryptData($row['court'], $key, $method);
+    
+    // Fetch assigned lawyers
+    $case_id = $row['case_id'];
+    $lawyers_query = "
+        SELECT u.username 
+        FROM users u 
+        JOIN case_lawyers cl ON u.id = cl.lawyer_id 
+        WHERE cl.case_id = $case_id
+    ";
+    
+    $lawyers_result = $conn->query($lawyers_query);
+    $lawyers = [];
+    while ($lawyer = $lawyers_result->fetch_assoc()) {
+        $lawyers[] = $lawyer['username'];
+    }
+    
+    $row['lawyers'] = implode(", ", $lawyers);
     $data[] = $row;
 }
 
@@ -110,6 +127,7 @@ $conn->close();
                                 <th class="border border-gray-500 px-4 py-2">Case Type</th>
                                 <th class="border border-gray-500 px-4 py-2">Status</th>
                                 <th class="border border-gray-500 px-4 py-2">Created At</th>
+                <th>Assigned Lawyers</th>
                                 <th class="border border-gray-500 px-4 py-2">Action</th>
                             </tr>
                         </thead>
@@ -122,6 +140,7 @@ $conn->close();
                     <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['case_type']); ?></td>
                     <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['status']); ?></td>
                     <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['created_at']); ?></td>
+                    <td><?php echo htmlspecialchars($row['lawyers']); ?></td>
                     <td class="border border-gray-500 px-4 py-2">
                         <!-- View Case Details Link -->
                         <a href="view_case_details.php?case_id=<?php echo $row['case_id']; ?>" class="text-blue-400">View Details</a>

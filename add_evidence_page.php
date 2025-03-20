@@ -144,9 +144,12 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
                     
                     <label for="submission_status" class="block mt-4 mb-2 font-semibold">Submission Status:</label>
                     <select id="submission_status" name="submission_status" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
-                        <option value="Submitted">Submitted</option>
-                        <option value="Pending">Pending</option>
-                        <option value="Rejected">Rejected</option>
+                <?php if ($usertype == 0 || $usertype == 1): ?>
+                            <option value="Submitted">Submitted</option>
+                <option value="Rejected">Rejected</option>
+                <?php endif; ?>
+                            <option value="Pending">Pending</option>
+                            
                     </select>
                     
                     <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mt-4">Add Evidence</button>

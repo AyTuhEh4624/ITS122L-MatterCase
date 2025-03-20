@@ -48,11 +48,19 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/view_cas
     <!-- Navigation Buttons -->
     <h3>Case Sections:</h3>
     <ul>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
         <li><a href="view_case_updates.php?case_id=<?php echo $case_id; ?>" class="text-blue-400">View Case Updates</a></li>
+        <?php endif; ?>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2 || $usertype == 4): ?>
         <li><a href="view_case_evidence.php?case_id=<?php echo $case_id; ?>" class="text-blue-400">View Evidence</a></li>
+        <?php endif; ?>
         <li><a href="view_case_forms.php?case_id=<?php echo $case_id; ?>" class="text-blue-400">View Forms</a></li>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 3 || $usertype == 4): ?>
         <li><a href="view_case_fees.php?case_id=<?php echo $case_id; ?>" class="text-blue-400">View Case Fees</a></li>
+        <?php endif; ?>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 3): ?>
         <li><a href="view_case_invoices.php?case_id=<?php echo $case_id; ?>" class="text-blue-400">View Invoices</a></li>
+        <?php endif; ?>
     </ul>
                 </div>
             </div>

@@ -101,7 +101,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="ml-auto flex space-x-4">
                 <a href="logout.php"><button class="text-gray-300">Logout</button></a>
                 <a href="<?php
-                // Redirect to the appropriate dashboard based on usertype
                     switch ($usertype) {
                         case 0: echo 'dashboard_admin.php'; break;
                         case 1: echo 'dashboard_partner.php'; break;
@@ -112,57 +111,54 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                 ?>">
                 <button class="text-gray-300">Dashboard</button>
-            </a>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[30%]">
+                <?php if (isset($_GET['success'])): ?>
+                    <p class="text-green-400">Client added successfully!</p>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <p class="text-red-400">Failed to add client. Please try again.</p>
+                <?php endif; ?>
+                
+                <!-- Form to Add a New Client -->
+                <form action="add_client_page.php" method="POST" class="mt-4">
+                    <div class="mb-4">
+                        <label for="client_name" class="block text-left">Client Name</label>
+                        <input type="text" id="client_name" name="client_name" class="w-full text-black p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="email" class="block text-left">Email</label>
+                        <input type="email" id="email" name="email" class="w-full text-black p-2 rounded" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="address" class="block text-left">Address</label>
+                        <textarea id="address" name="address" class="w-full text-black p-2 rounded" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="matter_ids" class="block text-left">Select Matters</label>
+                        <select id="matter_ids" name="matter_ids[]" class="w-full text-black p-2 rounded" multiple>
+                            <?php foreach ($matters as $matter): ?>
+                                <option value="<?php echo $matter['matter_id']; ?>">
+                                    <?php echo htmlspecialchars($matter['title']); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Client</button>
+                    </div>
+                    <div>
+                        <a href="view_clients_page.php">
+                            <button type="button" class="bg-gray-700 text-white font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to View Clients</button>
+                        </a>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
-
-<!-- Main Content -->
-<div class="flex-grow flex justify-center mt-4">
-    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
-
-    <div class="flex justify-center items-center mt-4">
-
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Client added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add client. Please try again.</p>
-    <?php endif; ?>
-        
-    <!-- Form to Add a New Case Update -->
-    <form action="add_client_page.php" method="POST">
-        <table border="0" class="mx-auto text-left">
-            <tr> 
-                <td>Client Name</td>
-                <td><input type="text" id="client_name" name="client_name" class="w-full text-black" required></td>
-            </tr>
-            <tr> 
-                <td>Email</td>
-                <td><input type="email" id="email" name="email" class="w-full text-black" required></td>
-            </tr>
-            <tr> 
-                <td>Address</td>
-                <td><textarea id="address" name="address" class="w-full text-black" required></textarea></td>
-            </tr>
-            <tr> 
-                <td>Select Matters</td>
-                <td><select id="matter_ids" name="matter_ids[]"  class="w-full text-black" multiple>
-            <?php foreach ($matters as $matter): ?>
-                <option value="<?php echo $matter['matter_id']; ?>">
-                    <?php echo htmlspecialchars($matter['title']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Client</button></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to View Clients</button></a></td>
-            </tr>
-        </table>
-    </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>

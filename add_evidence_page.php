@@ -110,71 +110,49 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
         <!-- Top Bar -->
         <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
             <span class="text-lg">Add <span class="text-green-400">Evidence</span></span>
-    
-            <div class="ml-auto flex space-x-4">
-                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
-                <a href="<?php
-                // Redirect to the appropriate dashboard based on usertype
-                    switch ($usertype) {
-                        case 0: echo 'dashboard_admin.php'; break;
-                        case 1: echo 'dashboard_partner.php'; break;
-                        case 2: echo 'dashboard_lawyer.php'; break;
-                        case 3: echo 'dashboard_paralegal.php'; break;
-                        case 4: echo 'dashboard_messenger.php'; break;
-                        default: echo 'login_page.php'; break;
-                    }
-                ?>">
-                <button class="text-gray-300">Dashboard</button>
-            </a>
+            <div class="ml-auto">
+                <a href="view_case_details.php?case_id=<?php echo $case_id; ?>">
+                    <button class="text-gray-300">Back to Case Details</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] max-w-lg">
+                <h2 class="text-xl font-semibold text-white mb-4">Add Evidence</h2>
+                
+                <!-- Display success or error messages -->
+                <?php if (isset($_GET['success'])): ?>
+                    <p class="text-green-400">Evidence added successfully!</p>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <p class="text-red-400">Failed to add evidence. Please try again.</p>
+                <?php endif; ?>
+                
+                <!-- Form to Add a New Evidence -->
+                <form action="add_evidence_page.php" method="POST" enctype="multipart/form-data" class="mt-4">
+                    <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+                    
+                    <label for="evidence_type" class="block mb-2 font-semibold">Evidence Type:</label>
+                    <input type="text" id="evidence_type" name="evidence_type" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                    
+                    <label for="file" class="block mt-4 mb-2 font-semibold">File:</label>
+                    <input type="file" id="file" name="file" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                    
+                    <label for="description" class="block mt-4 mb-2 font-semibold">Description:</label>
+                    <textarea id="description" name="description" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white"></textarea>
+                    
+                    <label for="submission_status" class="block mt-4 mb-2 font-semibold">Submission Status:</label>
+                    <select id="submission_status" name="submission_status" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                        <option value="Submitted">Submitted</option>
+                        <option value="Pending">Pending</option>
+                        <option value="Rejected">Rejected</option>
+                    </select>
+                    
+                    <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mt-4">Add Evidence</button>
+                </form>
+            </div>
         </div>
     </div>
-
-<!-- Main Content -->
-<div class="flex-grow flex justify-center mt-4">
-    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
-
-    <div class="flex justify-center items-center mt-4">
-
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Evidence added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add evidence. Please try again.</p>
-    <?php endif; ?>
-        
-    <!-- Form to Add a New Case Update -->
-    <form action="add_evidence_page.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
-        <table border="0" class="mx-auto text-left">
-            <tr> 
-                <td>Evidence Type</td>
-                <td><input type="text" id="evidence_type" name="evidence_type" class="w-full text-black" required></td>
-            </tr>
-            <tr> 
-                <td>File</td>
-                <td><input type="file" id="file" name="file" class="w-full text-black" required></td>
-            </tr>
-            <tr> 
-                <td>Description</td>
-                <td><textarea id="description" name="description" class="w-full text-black" required></textarea></td>
-            </tr>
-            <tr> 
-                <td>Submission Status</td>
-                <td><select id="submission_status" name="submission_status"  class="w-full text-black" required>
-            <option value="Submitted">Submitted</option>
-            <option value="Pending">Pending</option>
-            <option value="Rejected">Rejected</option>
-        </select></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Evidence</button></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to Case Details</button></a></td>
-            </tr>
-        </table>
-    </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>

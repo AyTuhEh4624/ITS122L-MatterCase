@@ -57,26 +57,59 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Case Update</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Edit Case Update</h1>
-
-    <!-- Display success or error messages -->
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Case update updated successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to update case update. Please try again.</p>
-    <?php endif; ?>
-
-    <!-- Form to Edit a Case Update -->
-    <form action="edit_case_update_page.php?update_id=<?php echo $update_id; ?>" method="POST">
-        <label for="update_text">Update Text:</label>
-        <textarea id="update_text" name="update_text" required><?php echo htmlspecialchars($update['update_text']); ?></textarea><br><br>
-
-        <button type="submit">Update</button>
-    </form>
-
-    <p><a href="view_case_updates.php?case_id=<?php echo $update['case_id']; ?>">Back to Case Details</a></p>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Edit <span class="text-green-400">Case Update</span></span>
+    
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+                </a>
+            </div>
+        </div>
+    
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] max-w-md">
+                <!-- Display success or error messages -->
+                <?php if (isset($_GET['success'])): ?>
+                    <p class="text-green-400">Case update updated successfully!</p>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <p class="text-red-400">Failed to update case update. Please try again.</p>
+                <?php endif; ?>
+    
+                <!-- Form to Edit a Case Update -->
+                <form action="edit_case_update_page.php?update_id=<?php echo $update_id; ?>" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-left">Update Text</label>
+                        <textarea id="update_text" name="update_text" required class="w-full px-3 py-2 rounded bg-gray-800 text-white border border-gray-600 h-32"><?php echo htmlspecialchars($update['update_text']); ?></textarea>
+                    </div>
+                    <div>
+                        <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full">Update</button>
+                    </div>
+                </form>
+    
+                <p class="mt-4">
+                    <a href="view_case_updates.php?case_id=<?php echo $update['case_id']; ?>" class="text-blue-400">Back to Case Details</a>
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

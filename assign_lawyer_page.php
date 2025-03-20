@@ -124,129 +124,85 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assign Lawyer</title>
-    <style>
-        form {
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-        }
-        select, input[type="submit"] {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        input[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            cursor: pointer;
-        }
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-        .assigned-cases {
-            margin-top: 20px;
-        }
-        .assigned-cases table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .assigned-cases th, .assigned-cases td {
-            border: 1px solid #ccc;
-            padding: 8px;
-            text-align: left;
-        }
-        .assigned-cases th {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Assign Lawyer to Case</h1>
-
-    <!-- Back to Dashboard Button -->
-    <p>
-        <a href="<?php
-            // Redirect to the appropriate dashboard based on usertype
-            switch ($usertype) {
-                case 0: echo 'dashboard_admin.php'; break;
-                case 1: echo 'dashboard_partner.php'; break;
-                case 2: echo 'dashboard_lawyer.php'; break;
-                case 3: echo 'dashboard_paralegal.php'; break;
-                case 4: echo 'dashboard_messenger.php'; break;
-                default: echo 'login_page.php'; break;
-            }
-        ?>">Back to Dashboard</a>
-    </p>
-
-    <!-- Assign Lawyer Form -->
-    <form method="POST" action="">
-        <label for="lawyer_id">Select Lawyer:</label>
-        <select id="lawyer_id" name="lawyer_id" onchange="this.form.submit()" required>
-            <option value="">-- Select a Lawyer --</option>
-            <?php foreach ($lawyers as $lawyer): ?>
-                <option value="<?php echo $lawyer['id']; ?>" <?php echo (isset($_GET['lawyer_id']) && $_GET['lawyer_id'] == $lawyer['id']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($lawyer['first_name'] . ' ' . $lawyer['last_name']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select>
-    </form>
-
-    <!-- Display Assigned Cases -->
-    <?php if (!empty($assignedCases)): ?>
-        <div class="assigned-cases">
-            <h2>Assigned Cases</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Case ID</th>
-                        <th>Case Title</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($assignedCases as $case): ?>
-                        <tr>
-                            <td><?php echo htmlspecialchars($case['case_id']); ?></td>
-                            <td><?php echo htmlspecialchars($case['case_title']); ?></td>
-                            <td>
-                                <form method="POST" action="" style="display:inline;">
-                                    <input type="hidden" name="case_id" value="<?php echo $case['case_id']; ?>">
-                                    <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
-                                    <input type="submit" name="remove_lawyer" value="Remove" style="background-color: #ff4d4d;">
-                                </form>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col items-center p-6">
+        <h1 class="text-2xl font-bold">Assign Lawyer to Case</h1>
+        
+        <div class="mt-4 w-full max-w-lg">
+            <a href="<?php
+                switch ($usertype) {
+                    case 0: echo 'dashboard_admin.php'; break;
+                    case 1: echo 'dashboard_partner.php'; break;
+                    case 2: echo 'dashboard_lawyer.php'; break;
+                    case 3: echo 'dashboard_paralegal.php'; break;
+                    case 4: echo 'dashboard_messenger.php'; break;
+                    default: echo 'login_page.php'; break;
+                }
+            ?>" class="text-yellow-300 underline">Back to Dashboard</a>
         </div>
-    <?php endif; ?>
-
-    <!-- Assign Lawyer to Case Form -->
-    <?php if (isset($_GET['lawyer_id'])): ?>
-        <form method="POST" action="">
-            <label for="case_id">Select Case:</label>
-            <select id="case_id" name="case_id" required>
-                <option value="">-- Select a Case --</option>
-                <?php foreach ($cases as $case): ?>
-                    <option value="<?php echo $case['case_id']; ?>"><?php echo htmlspecialchars($case['case_title']); ?></option>
+        
+        <form method="POST" action="" class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg mt-4">
+            <label for="lawyer_id" class="block mb-2 font-semibold">Select Lawyer:</label>
+            <select id="lawyer_id" name="lawyer_id" onchange="this.form.submit()" required class="w-full p-2 rounded bg-gray-700 text-white">
+                <option value="">-- Select a Lawyer --</option>
+                <?php foreach ($lawyers as $lawyer): ?>
+                    <option value="<?php echo $lawyer['id']; ?>" <?php echo (isset($_GET['lawyer_id']) && $_GET['lawyer_id'] == $lawyer['id']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($lawyer['first_name'] . ' ' . $lawyer['last_name']); ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
-
-            <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
-            <input type="submit" name="assign_lawyer" value="Assign Lawyer">
         </form>
-    <?php endif; ?>
+        
+        <?php if (!empty($assignedCases)): ?>
+            <div class="w-full max-w-lg mt-6">
+                <h2 class="text-lg font-semibold">Assigned Cases</h2>
+                <div class="overflow-x-auto mt-2">
+                    <table class="w-full border-collapse border border-gray-500">
+                        <thead>
+                            <tr class="bg-gray-800 text-white">
+                                <th class="border border-gray-500 px-4 py-2">Case ID</th>
+                                <th class="border border-gray-500 px-4 py-2">Case Title</th>
+                                <th class="border border-gray-500 px-4 py-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($assignedCases as $case): ?>
+                                <tr class="bg-gray-700 text-gray-300">
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($case['case_id']); ?></td>
+                                    <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($case['case_title']); ?></td>
+                                    <td class="border border-gray-500 px-4 py-2">
+                                        <form method="POST" action="" class="inline">
+                                            <input type="hidden" name="case_id" value="<?php echo $case['case_id']; ?>">
+                                            <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
+                                            <input type="submit" name="remove_lawyer" value="Remove" class="bg-red-500 px-2 py-1 rounded cursor-pointer">
+                                        </form>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        <?php endif; ?>
+        
+        <?php if (isset($_GET['lawyer_id'])): ?>
+            <form method="POST" action="" class="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg mt-6">
+                <label for="case_id" class="block mb-2 font-semibold">Select Case:</label>
+                <select id="case_id" name="case_id" required class="w-full p-2 rounded bg-gray-700 text-white">
+                    <option value="">-- Select a Case --</option>
+                    <?php foreach ($cases as $case): ?>
+                        <option value="<?php echo $case['case_id']; ?>"><?php echo htmlspecialchars($case['case_title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+                
+                <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
+                <input type="submit" name="assign_lawyer" value="Assign Lawyer" class="mt-4 w-full bg-green-500 text-white font-semibold py-2 rounded cursor-pointer">
+            </form>
+        <?php endif; ?>
+    </div>
 </body>
 </html>

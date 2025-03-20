@@ -95,40 +95,72 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Add Form</h1>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Add <span class="text-green-400">Form</span></span>
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+                </a>
+            </div>
+        </div>
 
-    <!-- Display success or error messages -->
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Form added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add form. Please try again.</p>
-    <?php endif; ?>
-
-    <!-- Form to Add a New Form -->
-    <form action="add_form_page.php" method="POST" enctype="multipart/form-data">
-        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
-
-        <label for="form_title">Form Title:</label>
-        <input type="text" id="form_title" name="form_title" required><br><br>
-
-        <label for="file">File:</label>
-        <input type="file" id="file" name="file" required><br><br>
-
-        <label for="submission_status">Submission Status:</label>
-        <select id="submission_status" name="submission_status" required>
-        <option value="Pending">Pending</option>
-        <?php if ($usertype == 0 || $usertype == 1): ?>
-            <option value="Submitted">Submitted</option>
-            <option value="Rejected">Rejected</option>
-            <?php endif ?>
-        </select><br><br>
-
-        <button type="submit">Add Form</button>
-    </form>
-
-    <p><a href="view_case_forms.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a></p>
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] max-w-lg">
+                <h1 class="text-xl font-semibold mb-4">Add Form</h1>
+                
+                <!-- Display success or error messages -->
+                <?php if (isset($_GET['success'])): ?>
+                    <p class="text-green-400">Form added successfully!</p>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <p class="text-red-400">Failed to add form. Please try again.</p>
+                <?php endif; ?>
+                
+                <!-- Form to Add a New Form -->
+                <form action="add_form_page.php" method="POST" enctype="multipart/form-data" class="text-left mt-4">
+                    <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+                    
+                    <label for="form_title" class="block text-sm mb-1">Form Title:</label>
+                    <input type="text" id="form_title" name="form_title" required 
+                           class="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    
+                    <label for="file" class="block text-sm mt-3 mb-1">File:</label>
+                    <input type="file" id="file" name="file" required 
+                           class="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                    
+                    <label for="submission_status" class="block text-sm mt-3 mb-1">Submission Status:</label>
+                    <select id="submission_status" name="submission_status" required 
+                            class="w-full p-2 rounded bg-gray-800 border border-gray-600 focus:outline-none focus:ring-2 focus:ring-green-400">
+                        <option value="Pending">Pending</option>
+                        <?php if ($usertype == 0 || $usertype == 1): ?>
+                            <option value="Submitted">Submitted</option>
+                            <option value="Rejected">Rejected</option>
+                        <?php endif; ?>
+                    </select>
+                    
+                    <button type="submit" class="mt-4 bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Form</button>
+                </form>
+                
+                <p class="mt-4"><a href="view_case_forms.php?case_id=<?php echo $case_id; ?>" class="text-blue-400">Back to Case Details</a></p>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

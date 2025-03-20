@@ -127,7 +127,7 @@ $conn->close();
                         <a href="view_case_details.php?case_id=<?php echo $row['case_id']; ?>" class="text-blue-400">View Details</a>
                         <!-- Edit Case Link (Only for Admins and Partners) -->
                         <?php if ($usertype == 0 || $usertype == 1): ?>
-                            | <a href="edit_case_page.php?case_id=<?php echo $row['case_id']; ?>" class="text-blue-400">Edit</a>
+                            | <a href="edit_case_page.php?case_id=<?php echo $row['case_id']; ?>" class="text-green-400">Edit</a>
                         <?php endif; ?>
                     </td>
                                 </tr>

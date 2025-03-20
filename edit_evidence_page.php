@@ -11,12 +11,6 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 $usertype = $_SESSION['usertype'];
 
-// Restrict access to Admins, Partners, and Lawyers only
-if ($usertype != 0 && $usertype != 1 && $usertype != 2) {
-    header('Location: view_cases_page.php');
-    exit();
-}
-
 // Connect to the database
 $conn = new mysqli('localhost', 'root', '', 'mattercase');
 if ($conn->connect_error) {
@@ -114,9 +108,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <?php elseif (isset($_GET['error'])): ?>
         <p style="color: red;">Failed to update evidence. Please try again.</p>
     <?php endif; ?>
-
+    
     <!-- Edit evidence -->
+    
     <form action="edit_evidence_page.php?evidence_id=<?php echo $evidence_id; ?>" method="POST" enctype="multipart/form-data">
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
         <label for="evidence_type">Evidence Type:</label>
         <input type="text" id="evidence_type" name="evidence_type" value="<?php echo htmlspecialchars($evidence['evidence_type']); ?>" required><br><br>
 
@@ -134,17 +130,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 No file uploaded
             <?php endif; ?>
         </p>
-
         <label for="description">Description:</label>
         <textarea id="description" name="description" required><?php echo htmlspecialchars($evidence['description']); ?></textarea><br><br>
+        <?php endif; ?>
 
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 3 || $usertype == 4): ?>
         <label for="submission_status">Submission Status:</label>
         <select id="submission_status" name="submission_status" required>
             <option value="Submitted" <?php echo $evidence['submission_status'] == 'Submitted' ? 'selected' : ''; ?>>Submitted</option>
             <option value="Pending" <?php echo $evidence['submission_status'] == 'Pending' ? 'selected' : ''; ?>>Pending</option>
             <option value="Rejected" <?php echo $evidence['submission_status'] == 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
         </select><br><br>
-
+        <?php endif; ?>
         <button type="submit">Update</button>
     </form>
 

@@ -13,8 +13,9 @@ include_once($_SERVER['DOCUMENT_ROOT'] . "/ITS122L-MatterCase/Functions/view_cas
     <a href="view_case_details.php?case_id=<?php echo $case_id; ?>">Back to Case Details</a>
 
     <h2>Case: <?php echo htmlspecialchars($case['case_title']); ?></h2>
-
+    <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
     <p><a href="add_evidence_page.php?case_id=<?php echo $case_id; ?>">Add New Evidence</a></p>
+    <?php endif; ?>
     <table>
         <thead>
             <tr>

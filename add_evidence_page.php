@@ -160,9 +160,12 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
             <tr> 
                 <td>Submission Status</td>
                 <td><select id="submission_status" name="submission_status"  class="w-full text-black" required>
-            <option value="Submitted">Submitted</option>
-            <option value="Pending">Pending</option>
-            <option value="Rejected">Rejected</option>
+                <?php if ($usertype == 0 || $usertype == 1): ?>
+                <option value="Submitted">Submitted</option>
+                <option value="Rejected">Rejected</option>
+                <?php endif; ?>
+                <option value="Pending">Pending</option>
+                
         </select></td>
             </tr>
             <tr> 

@@ -36,9 +36,7 @@ if (!isset($_SESSION['username']) || $_SESSION['usertype'] != 2) {
                 <!-- Buttons Section -->
                 <div class="grid grid-cols-2 gap-4">
                     <a href="view_clients_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Clients</button></a>
-                    <a href="view_matters_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Matters</button></a>
-                    <a href="view_users_admin.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Users</button></a>
-                </div>
+                    <a href="view_matters_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Matters</button></a>                </div>
             </div>
         </div>
     </div>

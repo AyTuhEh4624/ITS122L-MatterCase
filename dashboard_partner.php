@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+// usertype check
+if (!isset($_SESSION['username']) || $_SESSION['usertype'] != 1) {
+    header('Location: login_page.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,8 +33,9 @@
         <!-- Main Content -->
         <div class="flex-grow flex items-center justify-center">
             <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[80%] max-w-2xl">
-                <h1 class="text-3xl font-semibold">Welcome to the Partner Dashboard!</h1>
-                <p class="text-lg text-gray-300 mt-2">Manage legal matters and oversee operations</p>
+                <h1 class="text-3xl font-semibold">Welcome!</h1>
+                <p class="text-lg text-gray-300 mt-1"><?php echo htmlspecialchars($_SESSION['uname']); ?></p>
+                <p class="text-lg text-gray-300 mt-1"><?php echo htmlspecialchars($_SESSION['fname']); ?> <?php echo htmlspecialchars($_SESSION['lname']); ?></p>
                 <hr class="my-6 border-gray-600">
                 
                 <!-- Buttons Section -->

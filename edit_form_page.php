@@ -11,12 +11,6 @@ if (!isset($_SESSION['id'])) {
 $user_id = $_SESSION['id'];
 $usertype = $_SESSION['usertype'];
 
-// Restrict access to Admins, Partners, and Lawyers only
-if ($usertype != 0 && $usertype != 1 && $usertype != 2) {
-    header('Location: view_cases_page.php');
-    exit();
-}
-
 // Connect to the database
 $conn = new mysqli('localhost', 'root', '', 'mattercase');
 if ($conn->connect_error) {
@@ -116,6 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <!-- Form to Edit a Form -->
     <form action="edit_form_page.php?form_id=<?php echo $form_id; ?>" method="POST" enctype="multipart/form-data">
+    <?php if ($usertype == 0 || $usertype == 1 || $usertype == 2): ?>
         <label for="form_title">Form Title:</label>
         <input type="text" id="form_title" name="form_title" value="<?php echo htmlspecialchars($form['form_title']); ?>" required><br><br>
 
@@ -128,14 +123,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 No file uploaded
             <?php endif; ?>
         </p>
-
+        <?php endif; ?>
+        <?php if ($usertype == 0 || $usertype == 1 || $usertype == 4): ?>
         <label for="submission_status">Submission Status:</label>
         <select id="submission_status" name="submission_status" required>
             <option value="Submitted" <?php echo $form['submission_status'] == 'Submitted' ? 'selected' : ''; ?>>Submitted</option>
             <option value="Pending" <?php echo $form['submission_status'] == 'Pending' ? 'selected' : ''; ?>>Pending</option>
             <option value="Rejected" <?php echo $form['submission_status'] == 'Rejected' ? 'selected' : ''; ?>>Rejected</option>
         </select><br><br>
-
+        <?php endif; ?>
         <button type="submit">Update</button>
     </form>
 

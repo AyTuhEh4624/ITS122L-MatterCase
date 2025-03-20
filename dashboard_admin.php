@@ -44,6 +44,7 @@ if (!isset($_SESSION['username']) || $_SESSION['usertype'] != 0) {
                     <a href="view_matters_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Matters</button></a>
                     <a href="view_users_admin.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Users</button></a>
                     <a href="audit_log_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">View Audit Log</button></a>
+                    <a href="assign_lawyer_page.php"><button class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-16">Assign Lawyers</button></a>
                 </div>
             </div>
         </div>

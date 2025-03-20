@@ -105,8 +105,11 @@ $conn->close();
                                 <th class="border border-gray-500 px-4 py-2">Title</th>
                                 <th class="border border-gray-500 px-4 py-2">Description</th>
                                 <th class="border border-gray-500 px-4 py-2">Created At</th>
-                                <th class="border border-gray-500 px-4 py-2">Edit Matter</th>
                                 <th class="border border-gray-500 px-4 py-2">View Cases</th>
+                                <?php if ($usertype == 0 || $usertype == 1): ?>
+                                    <th class="border border-gray-500 px-4 py-2">Edit Matter</th>
+                                    <th class="border border-gray-500 px-4 py-2">Delete Matter</th>
+                                <?php endif; ?>
                             </tr>
                         </thead>
                         <tbody>
@@ -117,11 +120,16 @@ $conn->close();
                                     <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['description']); ?></td>
                                     <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($row['created_at']); ?></td>
                                     <td class="border border-gray-500 px-4 py-2">
+                                        <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-green-400">View Cases</a>
+                                    </td>
+                                    <?php if ($usertype == 0 || $usertype == 1): ?>
+                                    <td class="border border-gray-500 px-4 py-2">
                                         <a href="edit_matter_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-blue-400">Edit</a>
                                     </td>
                                     <td class="border border-gray-500 px-4 py-2">
-                                        <a href="view_cases_page.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-green-400">View Cases</a>
+                                        <a href="delete_matter.php?matter_id=<?php echo $row['matter_id']; ?>" class="text-red-400" onclick="return confirm('Are you sure you want to delete this matter and all its cases?');">Delete</a>
                                     </td>
+                                    <?php endif; ?>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

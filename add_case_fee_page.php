@@ -66,63 +66,42 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
         <!-- Top Bar -->
         <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
             <span class="text-lg">Add <span class="text-green-400">Case Fee</span></span>
-    
-            <div class="ml-auto flex space-x-4">
-                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
-                <a href="<?php
-                // Redirect to the appropriate dashboard based on usertype
-                    switch ($usertype) {
-                        case 0: echo 'dashboard_admin.php'; break;
-                        case 1: echo 'dashboard_partner.php'; break;
-                        case 2: echo 'dashboard_lawyer.php'; break;
-                        case 3: echo 'dashboard_paralegal.php'; break;
-                        case 4: echo 'dashboard_messenger.php'; break;
-                        default: echo 'login_page.php'; break;
-                    }
-                ?>">
-                <button class="text-gray-300">Dashboard</button>
-            </a>
+            <div class="ml-auto">
+                <a href="view_case_details.php?case_id=<?php echo $case_id; ?>">
+                    <button class="text-gray-300">Back to Case Details</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] max-w-lg">
+                <h2 class="text-xl font-semibold text-white mb-4">Add Case Fee</h2>
+                
+                <!-- Form to Add a New Case Fee -->
+                <form action="add_case_fee_page.php" method="POST" class="mt-4">
+                    <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+                    
+                    <label for="amount" class="block mb-2 font-semibold">Amount:</label>
+                    <input type="number" id="amount" name="amount" step="0.01" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                    
+                    <label for="fee_description" class="block mt-4 mb-2 font-semibold">Description:</label>
+                    <textarea id="fee_description" name="fee_description" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white"></textarea>
+                    
+                    <label for="payment_status" class="block mt-4 mb-2 font-semibold">Payment Status:</label>
+                    <select id="payment_status" name="payment_status" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                        <option value="Unpaid">Unpaid</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Overdue">Overdue</option>
+                    </select>
+                    
+                    <label for="due_date" class="block mt-4 mb-2 font-semibold">Due Date:</label>
+                    <input type="date" id="due_date" name="due_date" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                    
+                    <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mt-4">Add Fee</button>
+                </form>
+            </div>
         </div>
     </div>
-
-<!-- Main Content -->
-<div class="flex-grow flex justify-center mt-4">
-    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
-
-    <div class="flex justify-center items-center mt-4">
-    <form action="add_case_fee_page.php" method="POST">
-        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
-        <table border="0" class="mx-auto text-left">
-            <tr> 
-                <td>Amount</td>
-                <td><input type="number" id="amount" name="amount" class="text-black" step="0.01" required></td>
-            </tr>
-            <tr> 
-                <td>Description</td>
-                <td><textarea id="fee_description" name="fee_description" class="w-full text-black" required></textarea></td>
-            </tr>
-            <tr> 
-                <td>Payment Status</td>
-                <td><select id="payment_status" name="payment_status" class="w-full text-black" required>
-            <option value="Unpaid">Unpaid</option>
-            <option value="Paid">Paid</option>
-            <option value="Overdue">Overdue</option>
-        </select></td>
-            </tr>
-            <tr> 
-                <td>Due Date</td>
-                <td><input type="date" id="due_date" name="due_date" class="w-full text-black" required></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Fee</button></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to Case Details</button></a></td>
-            </tr>
-        </table>
-    </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>

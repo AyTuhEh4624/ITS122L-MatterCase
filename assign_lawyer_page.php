@@ -96,26 +96,82 @@ $conn->close();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Assign Lawyer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Assign Lawyer to Case</h1>
-    <p><a href="<?php echo ($usertype == 0) ? 'dashboard_admin.php' : 'dashboard_partner.php'; ?>">Back to Dashboard</a></p>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Assign <span class="text-green-400">Lawyer</span></span>
+            <div class="ml-auto flex space-x-4">
+                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
+                <a href="<?php
+                    switch ($usertype) {
+                        case 0: echo 'dashboard_admin.php'; break;
+                        case 1: echo 'dashboard_partner.php'; break;
+                        case 2: echo 'dashboard_lawyer.php'; break;
+                        case 3: echo 'dashboard_paralegal.php'; break;
+                        case 4: echo 'dashboard_messenger.php'; break;
+                        default: echo 'login_page.php'; break;
+                    }
+                ?>">
+                <button class="text-gray-300">Dashboard</button>
+                </a>
+            </div>
+        </div>
 
-    <form method="GET" action="">
-        <label for="lawyer_id">Select Lawyer:</label>
-        <select id="lawyer_id" name="lawyer_id" onchange="this.form.submit()" required>
-            <option value="">-- Select a Lawyer --</option>
-            <?php 
-            $lawyersResult->data_seek(0);
-            while ($lawyer = $lawyersResult->fetch_assoc()): ?>
-                <option value="<?php echo $lawyer['id']; ?>" <?php echo (isset($_GET['lawyer_id']) && $_GET['lawyer_id'] == $lawyer['id']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars(decryptData($lawyer['first_name'], $key, $method) . ' ' . decryptData($lawyer['last_name'], $key, $method)); ?>
-                </option>
-            <?php endwhile; ?>
-        </select>
-    </form>
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[70%]">
+                <h2 class="text-xl font-semibold text-white mb-4">Assign Lawyer to Case</h2>
+                
+                <!-- Assign Lawyer Form -->
+                <form method="POST" action="" class="mb-4">
+                    <label for="lawyer_id" class="block mb-2 font-semibold">Select Lawyer:</label>
+                    <select id="lawyer_id" name="lawyer_id" onchange="this.form.submit()" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                        <option value="">-- Select a Lawyer --</option>
+                        <?php foreach ($lawyers as $lawyer): ?>
+                            <option value="<?php echo $lawyer['id']; ?>" <?php echo (isset($_GET['lawyer_id']) && $_GET['lawyer_id'] == $lawyer['id']) ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($lawyer['first_name'] . ' ' . $lawyer['last_name']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
 
+                <!-- Display Assigned Cases -->
+                <?php if (!empty($assignedCases)): ?>
+                    <div class="mt-4">
+                        <h2 class="text-lg font-semibold text-white">Assigned Cases</h2>
+                        <div class="overflow-x-auto mt-2">
+                            <table class="w-full border-collapse border border-gray-500">
+                                <thead>
+                                    <tr class="bg-gray-800 text-white">
+                                        <th class="border border-gray-500 px-4 py-2">Case ID</th>
+                                        <th class="border border-gray-500 px-4 py-2">Case Title</th>
+                                        <th class="border border-gray-500 px-4 py-2">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($assignedCases as $case): ?>
+                                        <tr class="bg-gray-700 text-gray-300">
+                                            <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($case['case_id']); ?></td>
+                                            <td class="border border-gray-500 px-4 py-2"><?php echo htmlspecialchars($case['case_title']); ?></td>
+                                            <td class="border border-gray-500 px-4 py-2">
+                                                <form method="POST" action="" style="display:inline;">
+                                                    <input type="hidden" name="case_id" value="<?php echo $case['case_id']; ?>">
+                                                    <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
+                                                    <input type="submit" name="remove_lawyer" value="Remove" class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                <?php endif; ?>
     <?php if (!empty($assignedCases)): ?>
         <h2>Assigned Cases</h2>
         <table>
@@ -136,18 +192,21 @@ $conn->close();
         </table>
     <?php endif; ?>
 
-    <?php if (isset($_GET['lawyer_id'])): ?>
-        <form method="POST" action="">
-            <label for="case_id">Select Case:</label>
-            <select id="case_id" name="case_id" required>
-                <option value="">-- Select a Case --</option>
-                <?php while ($case = $casesResult->fetch_assoc()): ?>
-                    <option value="<?php echo $case['case_id']; ?>"><?php echo htmlspecialchars(decryptData($case['case_title'], $key, $method)); ?></option>
-                <?php endwhile; ?>
-            </select>
-            <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
-            <input type="submit" name="assign_lawyer" value="Assign Lawyer">
-        </form>
-    <?php endif; ?>
+                            <?php if (isset($_GET['lawyer_id'])): ?>
+                    <form method="POST" action="" class="mt-4">
+                        <label for="case_id" class="block mb-2 font-semibold">Select Case:</label>
+                        <select id="case_id" name="case_id" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                            <option value="">-- Select a Case --</option>
+                            <?php while ($case = $casesResult->fetch_assoc()): ?>
+                                <option value="<?php echo $case['case_id']; ?>"><?php echo htmlspecialchars(decryptData($case['case_title'], $key, $method)); ?></option>
+                            <?php endwhile; ?>
+                        </select>
+                        <input type="hidden" name="lawyer_id" value="<?php echo $_GET['lawyer_id']; ?>">
+                        <input type="submit" name="assign_lawyer" value="Assign Lawyer" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mt-2">
+                    </form>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

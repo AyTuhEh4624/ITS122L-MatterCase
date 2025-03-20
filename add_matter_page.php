@@ -62,36 +62,53 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Matter</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <h1>Add New Matter</h1>
+<body class="bg-gray-900 text-white">
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Bar -->
+        <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
+            <span class="text-lg">Add <span class="text-green-400">Matter</span></span>
+            <div class="ml-auto">
+                <a href="view_matters_page.php">
+                    <button class="text-gray-300">Back to View Matters</button>
+                </a>
+            </div>
+        </div>
 
-    <!-- Display success or error messages -->
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Matter added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add matter. Please try again.</p>
-    <?php endif; ?>
-
-    <!-- Form to Add a New Matter -->
-    <form action="add_matter_page.php" method="POST">
-        <label for="title">Title:</label>
-        <input type="text" id="title" name="title" required><br><br>
-
-        <label for="description">Description:</label>
-        <textarea id="description" name="description" required></textarea><br><br>
-
-        <label for="status">Status:</label>
-        <select id="status" name="status" required>
-            <option value="Open">Open</option>
-            <option value="Closed">Closed</option>
-            <option value="Pending">Pending</option>
-        </select><br><br>
-
-        <button type="submit">Add Matter</button>
-    </form>
-
-    <p><a href="view_matters_page.php">Back to View Matters</a></p>
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] max-w-lg">
+                <h2 class="text-xl font-semibold text-white mb-4">Add New Matter</h2>
+                
+                <!-- Display success or error messages -->
+                <?php if (isset($_GET['success'])): ?>
+                    <p class="text-green-400">Matter added successfully!</p>
+                <?php elseif (isset($_GET['error'])): ?>
+                    <p class="text-red-400">Failed to add matter. Please try again.</p>
+                <?php endif; ?>
+                
+                <!-- Form to Add a New Matter -->
+                <form action="add_matter_page.php" method="POST" class="mt-4">
+                    <label for="title" class="block mb-2 font-semibold">Title:</label>
+                    <input type="text" id="title" name="title" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                    
+                    <label for="description" class="block mt-4 mb-2 font-semibold">Description:</label>
+                    <textarea id="description" name="description" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white"></textarea>
+                    
+                    <label for="status" class="block mt-4 mb-2 font-semibold">Status:</label>
+                    <select id="status" name="status" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white">
+                        <option value="Open">Open</option>
+                        <option value="Closed">Closed</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                    
+                    <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mt-4">Add Matter</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

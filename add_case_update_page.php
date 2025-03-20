@@ -75,56 +75,30 @@ $case_id = $_GET['case_id']; // Get the case ID from the URL
     <div class="min-h-screen flex flex-col">
         <!-- Top Bar -->
         <div class="bg-gray-700 text-gray-300 px-6 py-3 flex items-center">
-            <span class="text-lg">Add <span class="text-green-400">Case</span></span>
-    
-            <div class="ml-auto flex space-x-4">
-                <a href="logout.php"><button class="text-gray-300">Logout</button></a>
-                <a href="<?php
-                // Redirect to the appropriate dashboard based on usertype
-                    switch ($usertype) {
-                        case 0: echo 'dashboard_admin.php'; break;
-                        case 1: echo 'dashboard_partner.php'; break;
-                        case 2: echo 'dashboard_lawyer.php'; break;
-                        case 3: echo 'dashboard_paralegal.php'; break;
-                        case 4: echo 'dashboard_messenger.php'; break;
-                        default: echo 'login_page.php'; break;
-                    }
-                ?>">
-                <button class="text-gray-300">Dashboard</button>
-            </a>
+            <span class="text-lg">Add <span class="text-green-400">Case Update</span></span>
+            <div class="ml-auto">
+                <a href="view_case_details.php?case_id=<?php echo $case_id; ?>">
+                    <button class="text-gray-300">Back to Case Details</button>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow flex justify-center mt-4">
+            <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%] max-w-lg">
+                <h2 class="text-xl font-semibold text-white mb-4">Add Case Update</h2>
+                
+                <!-- Form to Add a New Case Update -->
+                <form action="add_case_update_page.php" method="POST" class="mt-4">
+                    <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
+                    
+                    <label for="update_text" class="block mb-2 font-semibold">Update Text:</label>
+                    <textarea id="update_text" name="update_text" required class="w-full p-2 border border-gray-500 rounded-lg bg-gray-800 text-white h-40"></textarea>
+                    
+                    <button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12 mt-4">Add Update</button>
+                </form>
+            </div>
         </div>
     </div>
-
-<!-- Main Content -->
-<div class="flex-grow flex justify-center mt-4">
-    <div class="bg-gradient-to-b from-gray-700 to-gray-900 text-center rounded-lg p-8 shadow-lg w-[90%]">
-
-    <div class="flex justify-center items-center mt-4">
-
-    <?php if (isset($_GET['success'])): ?>
-        <p style="color: green;">Case update added successfully!</p>
-    <?php elseif (isset($_GET['error'])): ?>
-        <p style="color: red;">Failed to add case update. Please try again.</p>
-    <?php endif; ?>
-
-    <!-- Form to Add a New Case Update -->
-    <form action="add_case_update_page.php" method="POST">
-        <input type="hidden" name="case_id" value="<?php echo $case_id; ?>">
-        <table border="0" class="mx-auto text-left">
-            <tr> 
-                <td>Update Text</td>
-                <td><textarea id="update_text" name="update_text" class="w-full text-black" required></textarea></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><button type="submit" class="bg-yellow-300 text-gray-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Add Update</button></td>
-            </tr>
-            <tr> 
-                <td colspan="2"><a href="view_case_details.php?case_id=<?php echo $case_id; ?>"><button class="bg-gray-700 text-white-900 font-semibold py-3 rounded-lg shadow-md w-full h-12">Back to Case Details</button></a></td>
-            </tr>
-        </table>
-    </form>
-        </div>
-    </div>
-</div>
 </body>
 </html>

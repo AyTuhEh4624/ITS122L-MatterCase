@@ -68,17 +68,15 @@ $matters = $conn->query("SELECT matter_id, title FROM matters");
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Case</title>
     <link rel="stylesheet" href="css/add_case_page.css">
-
 </head>
 <body>
-
     <div class="top-container">
         <div class="top-nav">
             <div class="top-left">
                 <img src="FrontEndTrial\img\logo1.png" alt="MatterCase Logo">
                 <h1>MatterCase</h1>
             </div> 
-            <a href="logout.php" >Logout</a>
+            <a href="logout.php">Logout</a>
         </div>
     </div>
 
@@ -94,50 +92,41 @@ $matters = $conn->query("SELECT matter_id, title FROM matters");
         </div>
 
         <!-- Form to Add a New Case -->
-    <div class="form">
-        <form action="add_case_page.php" method="POST">
-            
-            <input type="text" id="case_title" name="case_title" placeholder="Case Title" required><br><br>
+        <div class="form">
+            <form action="add_case_page.php" method="POST">
+                <input type="text" id="case_title" name="case_title" placeholder="Case Title" required><br><br>
+                <input type="text" id="court" name="court" placeholder="Court" required><br><br>
+                <input type="text" id="case_type" name="case_type" placeholder="Case Type" required><br><br>
 
-            <input type="text" id="court" name="court" placeholder="Court" required><br><br>
+                <label for="client_id">Client:</label>
+                <select id="client_id" name="client_id" class="client" required>
+                    <?php while ($client = $clients->fetch_assoc()): ?>
+                        <option value="<?php echo $client['client_id']; ?>">
+                            <?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select><br><br>
 
-            <input type="text" id="case_type" name="case_type" placeholder="Case Type" required><br><br>
+                <label for="matter_id">Matter:</label>
+                <select id="matter_id" name="matter_id" class="matter" required>
+                    <?php while ($matter = $matters->fetch_assoc()): ?>
+                        <option value="<?php echo $matter['matter_id']; ?>">
+                            <?php echo htmlspecialchars(decryptData($matter['title'], $key, $method)); ?>
+                        </option>
+                    <?php endwhile; ?>
+                </select><br><br>
 
-            
+                <label for="status">Status:</label>
+                <select id="status" name="status" class="status" required>
+                    <option value="Active">Active</option>
+                    <option value="Dismissed">Dismissed</option>
+                    <option value="Closed">Closed</option>
+                </select><br><br>
 
-            <label for="client_id" >Client:</label>
-            <select id="client_id" name="client_id" class="client" required>
-                <?php while ($client = $clients->fetch_assoc()): ?>
-                    <option value="<?php echo $client['client_id']; ?>">
-                        <?php echo htmlspecialchars(decryptData($client['client_name'], $key, $method)); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select><br><br>
-
-            <label for="matter_id">Matter:</label>
-            <select id="matter_id" name="matter_id" class="matter" required>
-                <?php while ($matter = $matters->fetch_assoc()): ?>
-                    <option value="<?php echo $matter['matter_id']; ?>">
-                        <?php echo htmlspecialchars(decryptData($matter['title'], $key, $method)); ?>
-                    </option>
-                <?php endwhile; ?>
-            </select><br><br>
-
-            <label for="status">Status:</label>
-            <select id="status" name="status" class="status" required>
-                <option value="Active">Active</option>
-                <option value="Dismissed">Dismissed</option>
-                <option value="Closed">Closed</option>
-            </select><br><br>
-
-            <button type="submit">Add Case</button>
-        </form>
-        
-        <p><a href="view_cases_page.php">Back to View Cases</a></p>
+                <button type="submit">Add Case</button>
+            </form>
+            <p><a href="view_cases_page.php">Back to View Cases</a></p>
+        </div>
     </div>
-    </div>
-
-    
-    
 </body>
 </html>
